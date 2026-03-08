@@ -1,0 +1,251 @@
+student_id,major,year_of_study,study_level
+2509600,Data Science,2,Postgraduate
+2509601,Business Admin,1,Postgraduate
+2509602,Mechanical Engineering,1,Undergraduate
+2509603,Mechanical Engineering,2,Undergraduate
+2509604,Business Admin,4,Undergraduate
+2509605,Computer Science,4,Postgraduate
+2509606,Computer Science,4,Undergraduate
+2509607,Data Science,3,Undergraduate
+2509608,Law,3,Undergraduate
+2509609,Mechanical Engineering,1,Undergraduate
+2509610,Computer Science,3,Undergraduate
+2509611,Computer Science,2,Undergraduate
+2509612,Law,1,Postgraduate
+2509613,Data Science,4,Undergraduate
+2509614,Law,4,Undergraduate
+2509615,Data Science,2,Postgraduate
+2509616,Law,4,Undergraduate
+2509617,Law,2,Undergraduate
+2509618,Business Admin,4,Undergraduate
+2509619,Business Admin,4,Undergraduate
+2509620,Law,4,Undergraduate
+2509621,Mechanical Engineering,4,Postgraduate
+2509622,Business Admin,4,Postgraduate
+2509623,Data Science,1,Undergraduate
+2509624,Law,1,Undergraduate
+2509625,Business Admin,2,Postgraduate
+2509626,Data Science,2,Undergraduate
+2509627,Business Admin,3,Undergraduate
+2509628,Law,3,Postgraduate
+2509629,Mechanical Engineering,2,Postgraduate
+2509630,Data Science,3,Postgraduate
+2509631,Business Admin,4,Undergraduate
+2509632,Law,1,Undergraduate
+2509633,Data Science,4,Undergraduate
+2509634,Data Science,3,Postgraduate
+2509635,Computer Science,1,Undergraduate
+2509636,Law,1,Undergraduate
+2509637,Data Science,4,Undergraduate
+2509638,Law,1,Postgraduate
+2509639,Data Science,2,Postgraduate
+2509640,Data Science,2,Undergraduate
+2509641,Computer Science,2,Undergraduate
+2509642,Mechanical Engineering,4,Undergraduate
+2509643,Computer Science,4,Undergraduate
+2509644,Law,3,Undergraduate
+2509645,Business Admin,3,Undergraduate
+2509646,Law,3,Undergraduate
+2509647,Business Admin,1,Undergraduate
+2509648,Mechanical Engineering,4,Undergraduate
+2509649,Computer Science,2,Postgraduate
+2509650,Mechanical Engineering,2,Postgraduate
+2509651,Mechanical Engineering,3,Undergraduate
+2509652,Computer Science,2,Postgraduate
+2509653,Data Science,1,Undergraduate
+2509654,Business Admin,2,Undergraduate
+2509655,Computer Science,4,Undergraduate
+2509656,Law,1,Postgraduate
+2509657,Mechanical Engineering,1,Undergraduate
+2509658,Business Admin,2,Postgraduate
+2509659,Business Admin,4,Undergraduate
+2509660,Mechanical Engineering,3,Undergraduate
+2509661,Computer Science,1,Postgraduate
+2509662,Mechanical Engineering,1,Postgraduate
+2509663,Mechanical Engineering,4,Undergraduate
+2509664,Data Science,2,Postgraduate
+2509665,Computer Science,2,Undergraduate
+2509666,Computer Science,3,Undergraduate
+2509667,Mechanical Engineering,1,Postgraduate
+2509668,Business Admin,2,Postgraduate
+2509669,Business Admin,2,Postgraduate
+2509670,Mechanical Engineering,3,Undergraduate
+2509671,Law,1,Postgraduate
+2509672,Data Science,2,Postgraduate
+2509673,Computer Science,4,Undergraduate
+2509674,Law,4,Postgraduate
+2509675,Mechanical Engineering,2,Undergraduate
+2509676,Business Admin,3,Undergraduate
+2509677,Data Science,1,Postgraduate
+2509678,Computer Science,3,Postgraduate
+2509679,Mechanical Engineering,4,Undergraduate
+2509680,Law,4,Undergraduate
+2509681,Data Science,2,Undergraduate
+2509682,Computer Science,3,Undergraduate
+2509683,Business Admin,1,Undergraduate
+2509684,Computer Science,2,Postgraduate
+2509685,Mechanical Engineering,3,Undergraduate
+2509686,Mechanical Engineering,2,Undergraduate
+2509687,Mechanical Engineering,1,Undergraduate
+2509688,Mechanical Engineering,4,Undergraduate
+2509689,Mechanical Engineering,1,Postgraduate
+2509690,Data Science,3,Postgraduate
+2509691,Data Science,3,Undergraduate
+2509692,Business Admin,3,Undergraduate
+2509693,Business Admin,1,Undergraduate
+2509694,Computer Science,4,Postgraduate
+2509695,Mechanical Engineering,1,Postgraduate
+2509696,Mechanical Engineering,2,Undergraduate
+2509697,Data Science,2,Postgraduate
+2509698,Mechanical Engineering,3,Postgraduate
+2509699,Business Admin,2,Undergraduate
+2509700,Computer Science,1,Undergraduate
+2509701,Data Science,2,Undergraduate
+2509702,Business Admin,1,Undergraduate
+2509703,Business Admin,3,Undergraduate
+2509704,Computer Science,3,Undergraduate
+2509705,Law,4,Undergraduate
+2509706,Mechanical Engineering,4,Undergraduate
+2509707,Business Admin,3,Postgraduate
+2509708,Law,1,Postgraduate
+2509709,Computer Science,3,Undergraduate
+2509710,Data Science,3,Undergraduate
+2509711,Data Science,2,Undergraduate
+2509712,Business Admin,4,Undergraduate
+2509713,Computer Science,1,Postgraduate
+2509714,Mechanical Engineering,4,Undergraduate
+2509715,Computer Science,3,Undergraduate
+2509716,Computer Science,3,Postgraduate
+2509717,Law,2,Postgraduate
+2509718,Computer Science,4,Undergraduate
+2509719,Data Science,3,Postgraduate
+2509720,Law,3,Postgraduate
+2509721,Law,3,Undergraduate
+2509722,Data Science,4,Undergraduate
+2509723,Data Science,4,Postgraduate
+2509724,Business Admin,2,Postgraduate
+2509725,Law,4,Undergraduate
+2509726,Business Admin,2,Postgraduate
+2509727,Business Admin,4,Undergraduate
+2509728,Computer Science,2,Undergraduate
+2509729,Law,4,Undergraduate
+2509730,Law,4,Undergraduate
+2509731,Data Science,3,Postgraduate
+2509732,Computer Science,4,Undergraduate
+2509733,Business Admin,4,Postgraduate
+2509734,Computer Science,4,Undergraduate
+2509735,Mechanical Engineering,2,Undergraduate
+2509736,Law,2,Undergraduate
+2509737,Law,2,Postgraduate
+2509738,Data Science,1,Undergraduate
+2509739,Computer Science,4,Undergraduate
+2509740,Computer Science,1,Undergraduate
+2509741,Business Admin,2,Postgraduate
+2509742,Mechanical Engineering,1,Undergraduate
+2509743,Mechanical Engineering,2,Undergraduate
+2509744,Law,1,Undergraduate
+2509745,Law,3,Postgraduate
+2509746,Mechanical Engineering,2,Undergraduate
+2509747,Computer Science,4,Undergraduate
+2509748,Mechanical Engineering,1,Undergraduate
+2509749,Mechanical Engineering,2,Undergraduate
+2509750,Mechanical Engineering,3,Undergraduate
+2509751,Mechanical Engineering,2,Undergraduate
+2509752,Data Science,4,Postgraduate
+2509753,Law,1,Undergraduate
+2509754,Business Admin,3,Undergraduate
+2509755,Computer Science,1,Postgraduate
+2509756,Business Admin,1,Postgraduate
+2509757,Data Science,2,Undergraduate
+2509758,Business Admin,2,Undergraduate
+2509759,Data Science,3,Undergraduate
+2509760,Business Admin,3,Undergraduate
+2509761,Data Science,1,Undergraduate
+2509762,Computer Science,4,Postgraduate
+2509763,Mechanical Engineering,1,Undergraduate
+2509764,Business Admin,1,Undergraduate
+2509765,Mechanical Engineering,2,Undergraduate
+2509766,Business Admin,1,Undergraduate
+2509767,Computer Science,2,Postgraduate
+2509768,Law,2,Undergraduate
+2509769,Computer Science,2,Postgraduate
+2509770,Law,1,Undergraduate
+2509771,Law,4,Undergraduate
+2509772,Business Admin,4,Undergraduate
+2509773,Mechanical Engineering,1,Postgraduate
+2509774,Mechanical Engineering,1,Undergraduate
+2509775,Mechanical Engineering,3,Postgraduate
+2509776,Data Science,3,Undergraduate
+2509777,Mechanical Engineering,3,Undergraduate
+2509778,Mechanical Engineering,2,Postgraduate
+2509779,Data Science,4,Postgraduate
+2509780,Business Admin,3,Undergraduate
+2509781,Mechanical Engineering,4,Undergraduate
+2509782,Mechanical Engineering,2,Undergraduate
+2509783,Data Science,1,Undergraduate
+2509784,Business Admin,2,Undergraduate
+2509785,Data Science,2,Postgraduate
+2509786,Data Science,2,Postgraduate
+2509787,Business Admin,2,Undergraduate
+2509788,Law,2,Undergraduate
+2509789,Business Admin,4,Undergraduate
+2509790,Computer Science,3,Undergraduate
+2509791,Law,3,Undergraduate
+2509792,Mechanical Engineering,3,Postgraduate
+2509793,Business Admin,3,Undergraduate
+2509794,Data Science,4,Undergraduate
+2509795,Business Admin,3,Undergraduate
+2509796,Law,4,Postgraduate
+2509797,Mechanical Engineering,3,Undergraduate
+2509798,Mechanical Engineering,4,Undergraduate
+2509799,Computer Science,4,Undergraduate
+2509800,Computer Science,3,Undergraduate
+2509801,Data Science,4,Undergraduate
+2509802,Data Science,1,Undergraduate
+2509803,Law,4,Undergraduate
+2509804,Computer Science,1,Undergraduate
+2509805,Law,2,Undergraduate
+2509806,Mechanical Engineering,1,Undergraduate
+2509807,Computer Science,1,Postgraduate
+2509808,Law,3,Undergraduate
+2509809,Business Admin,3,Undergraduate
+2509810,Data Science,2,Undergraduate
+2509811,Computer Science,3,Undergraduate
+2509812,Computer Science,1,Postgraduate
+2509813,Mechanical Engineering,3,Undergraduate
+2509814,Mechanical Engineering,4,Undergraduate
+2509815,Data Science,2,Postgraduate
+2509816,Law,2,Undergraduate
+2509817,Computer Science,1,Undergraduate
+2509818,Data Science,4,Undergraduate
+2509819,Law,4,Undergraduate
+2509820,Mechanical Engineering,4,Undergraduate
+2509821,Data Science,2,Undergraduate
+2509822,Business Admin,2,Undergraduate
+2509823,Data Science,1,Undergraduate
+2509824,Law,1,Postgraduate
+2509825,Law,3,Undergraduate
+2509826,Law,2,Postgraduate
+2509827,Law,1,Undergraduate
+2509828,Mechanical Engineering,4,Undergraduate
+2509829,Data Science,2,Undergraduate
+2509830,Mechanical Engineering,1,Undergraduate
+2509831,Business Admin,2,Postgraduate
+2509832,Computer Science,2,Postgraduate
+2509833,Mechanical Engineering,1,Undergraduate
+2509834,Mechanical Engineering,3,Undergraduate
+2509835,Data Science,2,Undergraduate
+2509836,Data Science,2,Undergraduate
+2509837,Law,1,Undergraduate
+2509838,Computer Science,1,Undergraduate
+2509839,Data Science,4,Postgraduate
+2509840,Data Science,3,Undergraduate
+2509841,Mechanical Engineering,2,Undergraduate
+2509842,Data Science,4,Undergraduate
+2509843,Business Admin,1,Undergraduate
+2509844,Mechanical Engineering,1,Undergraduate
+2509845,Mechanical Engineering,1,Undergraduate
+2509846,Business Admin,1,Postgraduate
+2509847,Mechanical Engineering,1,Undergraduate
+2509848,Data Science,4,Undergraduate
+2509849,Computer Science,1,Undergraduate

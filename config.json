@@ -1,0 +1,6 @@
+{
+    "kafka_broker": "localhost:9092",
+    "topic_name": "library_events",
+    "input_file": "library_events.json",
+    "sleep_interval": 1.0
+}
