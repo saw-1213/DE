@@ -1,36 +1,30 @@
-import json
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
-from pyspark.sql.types import StructType, StructField, StringType, IntegerType, TimestampType
+from pyspark.sql.types import StructType, StructField, StringType, TimestampType
 
-# ---------------------------------------------------------
-# NEW: Open the Recipe Card (config.json)
-# ---------------------------------------------------------
-with open("config.json", "r") as f:
-    config_data = json.load(f)
-
-# Grab ONLY the two settings the Catcher needs, ignore the rest!
-my_broker = config_data["kafka_broker"]
-my_topic = config_data["topic_name"]
-
-# ---------------------------------------------------------
 # 1. Turn on the Spark Factory
-# ---------------------------------------------------------
-spark = SparkSession.builder.appName("PlumbingTest").getOrCreate()
+spark = SparkSession.builder.appName("LibraryLiveOccupancy").getOrCreate()
 
-# 2. The Blueprint (Must match the Producer exactly)
+# ---------------------------------------------------------
+# NEW: Take away Spark's microphone! (No more walls of text)
+# ---------------------------------------------------------
+spark.sparkContext.setLogLevel("WARN")
+
+# 2. The PERFECT Blueprint (Matches your JSON exactly!)
 library_schema = StructType([
-    StructField("student_id", IntegerType(), True),
-    StructField("gate", StringType(), True),
-    StructField("action", StringType(), True),
+    StructField("event_id", StringType(), True),
+    StructField("student_id", StringType(), True), # Changed to String because of quotes!
+    StructField("event_type", StringType(), True), # Changed from 'action'
+    StructField("gate_type", StringType(), True),  # Changed from 'gate'
+    StructField("location", StringType(), True),
     StructField("timestamp", TimestampType(), True)
 ])
 
-# 3. The Catching (Use the variables from the config file!)
+# 3. The Catching (Read from the Kafka belt)
 raw_stream = spark.readStream \
     .format("kafka") \
-    .option("kafka.bootstrap.servers", my_broker) \
-    .option("subscribe", my_topic) \
+    .option("kafka.bootstrap.servers", "localhost:9092") \
+    .option("subscribe", "library_events") \
     .load()
 
 # 4. The Unboxing (Turn Kafka bytes into a readable table)
