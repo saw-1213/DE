@@ -2,5 +2,9 @@
     "kafka_broker": "localhost:9092",
     "topic_name": "library_events",
     "input_file": "library_events.json",
-    "sleep_interval": 1.0
+    "sleep_interval": 1.0,
+    "HDFS_RAW_PATH": "hdfs://localhost:9000/user/student/library/raw",
+    "HDFS_CURATED_PATH": "hdfs://localhost:9000/user/student/library/curated",
+    "RAW_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/raw",
+    "CURATED_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/curated"
 }
