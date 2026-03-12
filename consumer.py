@@ -28,7 +28,7 @@ class LibraryStreamProcessor:
             .format("kafka") \
             .option("kafka.bootstrap.servers", self.config["KAFKA_BROKER"]) \
             .option("subscribe", self.config["TOPIC_NAME"]) \
-            .option("startingOffsets", "latest") \
+            .option("startingOffsets", "earliest") \
             .load()
 
     def write_raw(self, df):
