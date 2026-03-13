@@ -26,8 +26,8 @@ class LibraryStreamProcessor:
     def read_stream(self):
         return self.spark.readStream \
             .format("kafka") \
-            .option("kafka.bootstrap.servers", self.config["KAFKA_BROKER"]) \
-            .option("subscribe", self.config["TOPIC_NAME"]) \
+            .option("kafka.bootstrap.servers", self.config["kafka_broker"]) \
+            .option("subscribe", self.config["topic_name"]) \
             .option("startingOffsets", "earliest") \
             .load()
 
