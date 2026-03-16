@@ -6,5 +6,8 @@
     "HDFS_RAW_PATH": "hdfs://localhost:9000/user/student/library/raw",
     "HDFS_CURATED_PATH": "hdfs://localhost:9000/user/student/library/curated",
     "RAW_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/raw",
-    "CURATED_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/curated"
+    "CURATED_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/curated",
+    "HDFS_HOURLY_REPORT_PATH": "hdfs://localhost:9000/user/student/library/reports/hourly_traffic",
+    "HDFS_DAILY_ROOM_PATH": "hdfs://localhost:9000/user/student/library/reports/daily_rooms",
+    "HDFS_ROOM_DURATION_PATH": "hdfs://localhost:9000/user/student/library/reports/room_durations"
 }
