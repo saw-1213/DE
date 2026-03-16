@@ -1,129 +1,129 @@
 [
     {
         "student_id": "2509600",
-        "major": "Data Science",
-        "year_of_study": 2,
+        "major": "Law",
+        "year_of_study": 1,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509601",
         "major": "Business Admin",
-        "year_of_study": 1,
-        "study_level": "Postgraduate"
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509602",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "major": "Business Admin",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509603",
-        "major": "Mechanical Engineering",
+        "major": "Business Admin",
         "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509604",
-        "major": "Business Admin",
-        "year_of_study": 4,
+        "major": "Data Science",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509605",
-        "major": "Computer Science",
-        "year_of_study": 4,
-        "study_level": "Postgraduate"
+        "major": "Mechanical Engineering",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509606",
-        "major": "Computer Science",
-        "year_of_study": 4,
+        "major": "Law",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509607",
         "major": "Data Science",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509608",
-        "major": "Law",
-        "year_of_study": 3,
+        "major": "Business Admin",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509609",
-        "major": "Mechanical Engineering",
+        "major": "Law",
         "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509610",
-        "major": "Computer Science",
-        "year_of_study": 3,
+        "major": "Data Science",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509611",
+        "major": "Business Admin",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509612",
+        "major": "Data Science",
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509613",
+        "major": "Computer Science",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509614",
         "major": "Computer Science",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509612",
-        "major": "Law",
-        "year_of_study": 1,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509613",
-        "major": "Data Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509614",
-        "major": "Law",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
         "student_id": "2509615",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "major": "Business Admin",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509616",
-        "major": "Law",
+        "major": "Computer Science",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509617",
-        "major": "Law",
-        "year_of_study": 2,
+        "major": "Mechanical Engineering",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509618",
-        "major": "Business Admin",
-        "year_of_study": 4,
+        "major": "Data Science",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509619",
         "major": "Business Admin",
-        "year_of_study": 4,
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509620",
-        "major": "Law",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "major": "Business Admin",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509621",
@@ -133,19 +133,19 @@
     },
     {
         "student_id": "2509622",
-        "major": "Business Admin",
-        "year_of_study": 4,
-        "study_level": "Postgraduate"
+        "major": "Computer Science",
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509623",
-        "major": "Data Science",
-        "year_of_study": 1,
+        "major": "Mechanical Engineering",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509624",
-        "major": "Law",
+        "major": "Computer Science",
         "year_of_study": 1,
         "study_level": "Undergraduate"
     },
@@ -153,205 +153,205 @@
         "student_id": "2509625",
         "major": "Business Admin",
         "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509626",
-        "major": "Data Science",
-        "year_of_study": 2,
+        "major": "Business Admin",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509627",
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509628",
+        "major": "Computer Science",
+        "year_of_study": 2,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509629",
+        "major": "Law",
+        "year_of_study": 2,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509630",
         "major": "Business Admin",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509628",
-        "major": "Law",
-        "year_of_study": 3,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509629",
-        "major": "Mechanical Engineering",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509630",
-        "major": "Data Science",
-        "year_of_study": 3,
-        "study_level": "Postgraduate"
-    },
-    {
         "student_id": "2509631",
-        "major": "Business Admin",
+        "major": "Computer Science",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509632",
-        "major": "Law",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "major": "Data Science",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509633",
         "major": "Data Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509634",
-        "major": "Data Science",
-        "year_of_study": 3,
+        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509635",
+        "student_id": "2509634",
         "major": "Computer Science",
         "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
+        "student_id": "2509635",
+        "major": "Business Admin",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
+    },
+    {
         "student_id": "2509636",
-        "major": "Law",
-        "year_of_study": 1,
+        "major": "Mechanical Engineering",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509637",
-        "major": "Data Science",
-        "year_of_study": 4,
+        "major": "Mechanical Engineering",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509638",
-        "major": "Law",
-        "year_of_study": 1,
+        "major": "Data Science",
+        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509639",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509640",
-        "major": "Data Science",
-        "year_of_study": 2,
+        "major": "Business Admin",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
+        "student_id": "2509640",
+        "major": "Law",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
+    },
+    {
         "student_id": "2509641",
-        "major": "Computer Science",
+        "major": "Mechanical Engineering",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509642",
-        "major": "Mechanical Engineering",
-        "year_of_study": 4,
+        "major": "Computer Science",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509643",
         "major": "Computer Science",
-        "year_of_study": 4,
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509644",
-        "major": "Law",
+        "major": "Business Admin",
         "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509645",
         "major": "Business Admin",
-        "year_of_study": 3,
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509646",
-        "major": "Law",
-        "year_of_study": 3,
+        "major": "Business Admin",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509647",
-        "major": "Business Admin",
-        "year_of_study": 1,
+        "major": "Computer Science",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509648",
         "major": "Mechanical Engineering",
         "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509649",
         "major": "Computer Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509650",
-        "major": "Mechanical Engineering",
-        "year_of_study": 2,
+        "major": "Law",
+        "year_of_study": 3,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509651",
-        "major": "Mechanical Engineering",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "major": "Computer Science",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509652",
-        "major": "Computer Science",
+        "major": "Law",
         "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509653",
         "major": "Data Science",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509654",
-        "major": "Business Admin",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509655",
-        "major": "Computer Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509656",
+        "student_id": "2509654",
         "major": "Law",
         "year_of_study": 1,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509657",
-        "major": "Mechanical Engineering",
+        "student_id": "2509655",
+        "major": "Law",
         "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509658",
+        "student_id": "2509656",
+        "major": "Computer Science",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509657",
         "major": "Business Admin",
         "year_of_study": 2,
         "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509658",
+        "major": "Mechanical Engineering",
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509659",
@@ -361,7 +361,7 @@
     },
     {
         "student_id": "2509660",
-        "major": "Mechanical Engineering",
+        "major": "Data Science",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
@@ -369,60 +369,60 @@
         "student_id": "2509661",
         "major": "Computer Science",
         "year_of_study": 1,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509662",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
-        "study_level": "Postgraduate"
+        "major": "Computer Science",
+        "year_of_study": 2,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509663",
-        "major": "Mechanical Engineering",
-        "year_of_study": 4,
+        "major": "Law",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509664",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "major": "Computer Science",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509665",
         "major": "Computer Science",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509666",
-        "major": "Computer Science",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "major": "Business Admin",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509667",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
+        "major": "Business Admin",
+        "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509668",
-        "major": "Business Admin",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509669",
-        "major": "Business Admin",
-        "year_of_study": 2,
+        "major": "Data Science",
+        "year_of_study": 1,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509670",
-        "major": "Mechanical Engineering",
-        "year_of_study": 3,
+        "major": "Data Science",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
@@ -433,38 +433,38 @@
     },
     {
         "student_id": "2509672",
-        "major": "Data Science",
+        "major": "Law",
         "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509673",
         "major": "Computer Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509674",
+        "major": "Mechanical Engineering",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509675",
         "major": "Law",
         "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509675",
-        "major": "Mechanical Engineering",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
         "student_id": "2509676",
         "major": "Business Admin",
-        "year_of_study": 3,
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509677",
-        "major": "Data Science",
-        "year_of_study": 1,
+        "major": "Business Admin",
+        "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
@@ -475,133 +475,133 @@
     },
     {
         "student_id": "2509679",
-        "major": "Mechanical Engineering",
+        "major": "Data Science",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509680",
-        "major": "Law",
-        "year_of_study": 4,
+        "major": "Business Admin",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509681",
-        "major": "Data Science",
-        "year_of_study": 2,
+        "major": "Business Admin",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509682",
         "major": "Computer Science",
-        "year_of_study": 3,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509683",
         "major": "Business Admin",
-        "year_of_study": 1,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509684",
-        "major": "Computer Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "major": "Business Admin",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509685",
-        "major": "Mechanical Engineering",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "major": "Law",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509686",
         "major": "Mechanical Engineering",
         "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509687",
         "major": "Mechanical Engineering",
-        "year_of_study": 1,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509688",
-        "major": "Mechanical Engineering",
-        "year_of_study": 4,
+        "major": "Business Admin",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509689",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
-        "study_level": "Postgraduate"
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509690",
-        "major": "Data Science",
-        "year_of_study": 3,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509691",
-        "major": "Data Science",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509692",
-        "major": "Business Admin",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509693",
-        "major": "Business Admin",
+        "major": "Computer Science",
         "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509694",
+        "student_id": "2509691",
         "major": "Computer Science",
         "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509695",
+        "student_id": "2509692",
+        "major": "Business Admin",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509693",
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509694",
         "major": "Mechanical Engineering",
         "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509695",
+        "major": "Law",
+        "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509696",
         "major": "Mechanical Engineering",
-        "year_of_study": 2,
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509697",
         "major": "Data Science",
-        "year_of_study": 2,
+        "year_of_study": 3,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509698",
-        "major": "Mechanical Engineering",
-        "year_of_study": 3,
+        "major": "Computer Science",
+        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509699",
         "major": "Business Admin",
-        "year_of_study": 2,
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509700",
-        "major": "Computer Science",
+        "major": "Business Admin",
         "year_of_study": 1,
         "study_level": "Undergraduate"
     },
@@ -614,92 +614,92 @@
     {
         "student_id": "2509702",
         "major": "Business Admin",
-        "year_of_study": 1,
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509703",
-        "major": "Business Admin",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509704",
         "major": "Computer Science",
-        "year_of_study": 3,
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509705",
         "major": "Law",
-        "year_of_study": 4,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509706",
-        "major": "Mechanical Engineering",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "major": "Computer Science",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509707",
         "major": "Business Admin",
         "year_of_study": 3,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509708",
-        "major": "Law",
-        "year_of_study": 1,
+        "major": "Mechanical Engineering",
+        "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509709",
-        "major": "Computer Science",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509710",
-        "major": "Data Science",
+        "major": "Law",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509711",
-        "major": "Data Science",
+        "major": "Mechanical Engineering",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509712",
-        "major": "Business Admin",
-        "year_of_study": 4,
+        "major": "Computer Science",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509713",
-        "major": "Computer Science",
+        "major": "Data Science",
+        "year_of_study": 2,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509714",
+        "major": "Law",
         "year_of_study": 1,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509714",
-        "major": "Mechanical Engineering",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
         "student_id": "2509715",
-        "major": "Computer Science",
+        "major": "Mechanical Engineering",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509716",
-        "major": "Computer Science",
+        "major": "Business Admin",
         "year_of_study": 3,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509717",
@@ -709,656 +709,656 @@
     },
     {
         "student_id": "2509718",
-        "major": "Computer Science",
+        "major": "Mechanical Engineering",
         "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509719",
-        "major": "Data Science",
-        "year_of_study": 3,
+        "major": "Computer Science",
+        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509720",
-        "major": "Law",
-        "year_of_study": 3,
-        "study_level": "Postgraduate"
+        "major": "Computer Science",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509721",
-        "major": "Law",
-        "year_of_study": 3,
+        "major": "Business Admin",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509722",
-        "major": "Data Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "major": "Law",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509723",
-        "major": "Data Science",
-        "year_of_study": 4,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509724",
-        "major": "Business Admin",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509725",
         "major": "Law",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509726",
-        "major": "Business Admin",
+        "student_id": "2509724",
+        "major": "Law",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509725",
+        "major": "Data Science",
         "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509726",
+        "major": "Mechanical Engineering",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509727",
-        "major": "Business Admin",
+        "major": "Law",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509728",
-        "major": "Computer Science",
+        "major": "Data Science",
         "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509729",
-        "major": "Law",
-        "year_of_study": 4,
+        "major": "Data Science",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509730",
-        "major": "Law",
+        "major": "Data Science",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509731",
-        "major": "Data Science",
-        "year_of_study": 3,
-        "study_level": "Postgraduate"
+        "major": "Law",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509732",
-        "major": "Computer Science",
-        "year_of_study": 4,
+        "major": "Data Science",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509733",
-        "major": "Business Admin",
-        "year_of_study": 4,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509734",
-        "major": "Computer Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509735",
         "major": "Mechanical Engineering",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509736",
-        "major": "Law",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "student_id": "2509734",
+        "major": "Data Science",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509737",
-        "major": "Law",
+        "student_id": "2509735",
+        "major": "Data Science",
         "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509738",
-        "major": "Data Science",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "student_id": "2509736",
+        "major": "Business Admin",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509739",
-        "major": "Computer Science",
+        "student_id": "2509737",
+        "major": "Business Admin",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509738",
+        "major": "Mechanical Engineering",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509740",
-        "major": "Computer Science",
+        "student_id": "2509739",
+        "major": "Business Admin",
         "year_of_study": 1,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509740",
+        "major": "Data Science",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509741",
         "major": "Business Admin",
         "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509742",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
+        "major": "Data Science",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509743",
         "major": "Mechanical Engineering",
         "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509744",
-        "major": "Law",
+        "major": "Business Admin",
         "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509745",
-        "major": "Law",
-        "year_of_study": 3,
+        "major": "Computer Science",
+        "year_of_study": 1,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509746",
-        "major": "Mechanical Engineering",
-        "year_of_study": 2,
+        "major": "Data Science",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509747",
-        "major": "Computer Science",
+        "major": "Business Admin",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509748",
         "major": "Mechanical Engineering",
-        "year_of_study": 1,
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509749",
         "major": "Mechanical Engineering",
-        "year_of_study": 2,
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509750",
-        "major": "Mechanical Engineering",
-        "year_of_study": 3,
+        "major": "Computer Science",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509751",
-        "major": "Mechanical Engineering",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509752",
-        "major": "Data Science",
-        "year_of_study": 4,
+        "major": "Business Admin",
+        "year_of_study": 3,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509753",
+        "student_id": "2509752",
         "major": "Law",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509754",
-        "major": "Business Admin",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
+        "student_id": "2509753",
+        "major": "Mechanical Engineering",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509754",
+        "major": "Law",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
+    },
+    {
         "student_id": "2509755",
         "major": "Computer Science",
-        "year_of_study": 1,
+        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509756",
-        "major": "Business Admin",
-        "year_of_study": 1,
+        "major": "Computer Science",
+        "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509757",
-        "major": "Data Science",
+        "major": "Mechanical Engineering",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509758",
-        "major": "Business Admin",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "major": "Computer Science",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509759",
-        "major": "Data Science",
-        "year_of_study": 3,
+        "major": "Law",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509760",
-        "major": "Business Admin",
+        "major": "Computer Science",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509761",
+        "major": "Law",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509761",
-        "major": "Data Science",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
         "student_id": "2509762",
-        "major": "Computer Science",
-        "year_of_study": 4,
-        "study_level": "Postgraduate"
+        "major": "Data Science",
+        "year_of_study": 2,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509763",
         "major": "Mechanical Engineering",
-        "year_of_study": 1,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509764",
-        "major": "Business Admin",
-        "year_of_study": 1,
+        "major": "Computer Science",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509765",
-        "major": "Mechanical Engineering",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509766",
-        "major": "Business Admin",
+        "major": "Data Science",
         "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509767",
-        "major": "Computer Science",
-        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
-        "student_id": "2509768",
+        "student_id": "2509766",
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509767",
         "major": "Law",
-        "year_of_study": 2,
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509768",
+        "major": "Mechanical Engineering",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509769",
-        "major": "Computer Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "major": "Business Admin",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509770",
-        "major": "Law",
-        "year_of_study": 1,
+        "major": "Data Science",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509771",
-        "major": "Law",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509772",
-        "major": "Business Admin",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509773",
         "major": "Mechanical Engineering",
-        "year_of_study": 1,
+        "year_of_study": 3,
         "study_level": "Postgraduate"
     },
     {
+        "student_id": "2509772",
+        "major": "Law",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509773",
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
+    },
+    {
         "student_id": "2509774",
-        "major": "Mechanical Engineering",
+        "major": "Law",
         "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509775",
-        "major": "Mechanical Engineering",
-        "year_of_study": 3,
+        "major": "Data Science",
+        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509776",
         "major": "Data Science",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509777",
         "major": "Mechanical Engineering",
-        "year_of_study": 3,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509778",
         "major": "Mechanical Engineering",
         "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509779",
-        "major": "Data Science",
-        "year_of_study": 4,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509780",
-        "major": "Business Admin",
-        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509781",
+        "student_id": "2509779",
+        "major": "Computer Science",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509780",
         "major": "Mechanical Engineering",
         "year_of_study": 4,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509781",
+        "major": "Data Science",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509782",
-        "major": "Mechanical Engineering",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "major": "Business Admin",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509783",
         "major": "Data Science",
         "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509784",
-        "major": "Business Admin",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
+        "major": "Computer Science",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509785",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509786",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509787",
-        "major": "Business Admin",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509788",
-        "major": "Law",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509789",
-        "major": "Business Admin",
+        "major": "Mechanical Engineering",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509790",
+        "student_id": "2509786",
         "major": "Computer Science",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509787",
+        "major": "Data Science",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509788",
+        "major": "Business Admin",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509789",
+        "major": "Mechanical Engineering",
+        "year_of_study": 2,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509790",
+        "major": "Law",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509791",
-        "major": "Law",
-        "year_of_study": 3,
+        "major": "Business Admin",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509792",
-        "major": "Mechanical Engineering",
-        "year_of_study": 3,
+        "major": "Law",
+        "year_of_study": 2,
         "study_level": "Postgraduate"
     },
     {
         "student_id": "2509793",
-        "major": "Business Admin",
+        "major": "Mechanical Engineering",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509794",
-        "major": "Data Science",
-        "year_of_study": 4,
+        "major": "Business Admin",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509795",
-        "major": "Business Admin",
-        "year_of_study": 3,
+        "major": "Data Science",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509796",
-        "major": "Law",
-        "year_of_study": 4,
-        "study_level": "Postgraduate"
+        "major": "Business Admin",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509797",
         "major": "Mechanical Engineering",
         "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509798",
-        "major": "Mechanical Engineering",
+        "major": "Data Science",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509799",
         "major": "Computer Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509800",
-        "major": "Computer Science",
-        "year_of_study": 3,
+        "major": "Mechanical Engineering",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509801",
         "major": "Data Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509802",
         "major": "Data Science",
         "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509803",
-        "major": "Law",
-        "year_of_study": 4,
+        "major": "Data Science",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509804",
-        "major": "Computer Science",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509805",
-        "major": "Law",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509806",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509807",
-        "major": "Computer Science",
+        "major": "Data Science",
         "year_of_study": 1,
         "study_level": "Postgraduate"
     },
     {
+        "student_id": "2509805",
+        "major": "Mechanical Engineering",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509806",
+        "major": "Computer Science",
+        "year_of_study": 2,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509807",
+        "major": "Business Admin",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
+    },
+    {
         "student_id": "2509808",
-        "major": "Law",
-        "year_of_study": 3,
+        "major": "Computer Science",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509809",
-        "major": "Business Admin",
-        "year_of_study": 3,
+        "major": "Computer Science",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509810",
-        "major": "Data Science",
+        "major": "Business Admin",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509811",
-        "major": "Computer Science",
+        "major": "Data Science",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509812",
-        "major": "Computer Science",
-        "year_of_study": 1,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509813",
         "major": "Mechanical Engineering",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
+        "student_id": "2509813",
+        "major": "Law",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
+    },
+    {
         "student_id": "2509814",
-        "major": "Mechanical Engineering",
-        "year_of_study": 4,
+        "major": "Data Science",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509815",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
+        "major": "Business Admin",
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509816",
-        "major": "Law",
-        "year_of_study": 2,
+        "major": "Business Admin",
+        "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509817",
         "major": "Computer Science",
-        "year_of_study": 1,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509818",
         "major": "Data Science",
-        "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509819",
-        "major": "Law",
+        "major": "Data Science",
         "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509820",
+        "major": "Computer Science",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509821",
+        "major": "Mechanical Engineering",
+        "year_of_study": 1,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509822",
+        "major": "Data Science",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509823",
         "major": "Mechanical Engineering",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509821",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509822",
-        "major": "Business Admin",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509823",
-        "major": "Data Science",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
         "student_id": "2509824",
-        "major": "Law",
+        "major": "Business Admin",
         "year_of_study": 1,
-        "study_level": "Postgraduate"
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509825",
-        "major": "Law",
-        "year_of_study": 3,
+        "major": "Mechanical Engineering",
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509826",
         "major": "Law",
-        "year_of_study": 2,
+        "year_of_study": 4,
         "study_level": "Postgraduate"
     },
     {
@@ -1369,68 +1369,68 @@
     },
     {
         "student_id": "2509828",
+        "major": "Data Science",
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
+    },
+    {
+        "student_id": "2509829",
         "major": "Mechanical Engineering",
         "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509829",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
         "student_id": "2509830",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509831",
-        "major": "Business Admin",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509832",
-        "major": "Computer Science",
-        "year_of_study": 2,
-        "study_level": "Postgraduate"
-    },
-    {
-        "student_id": "2509833",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509834",
         "major": "Mechanical Engineering",
         "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
-        "student_id": "2509835",
-        "major": "Data Science",
+        "student_id": "2509831",
+        "major": "Mechanical Engineering",
+        "year_of_study": 1,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509832",
+        "major": "Business Admin",
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509833",
+        "major": "Business Admin",
+        "year_of_study": 3,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509834",
+        "major": "Business Admin",
         "year_of_study": 2,
+        "study_level": "Undergraduate"
+    },
+    {
+        "student_id": "2509835",
+        "major": "Business Admin",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509836",
-        "major": "Data Science",
-        "year_of_study": 2,
-        "study_level": "Undergraduate"
-    },
-    {
-        "student_id": "2509837",
         "major": "Law",
         "year_of_study": 1,
         "study_level": "Undergraduate"
     },
     {
+        "student_id": "2509837",
+        "major": "Mechanical Engineering",
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
+    },
+    {
         "student_id": "2509838",
         "major": "Computer Science",
-        "year_of_study": 1,
+        "year_of_study": 4,
         "study_level": "Undergraduate"
     },
     {
@@ -1442,61 +1442,61 @@
     {
         "student_id": "2509840",
         "major": "Data Science",
-        "year_of_study": 3,
-        "study_level": "Undergraduate"
+        "year_of_study": 2,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509841",
-        "major": "Mechanical Engineering",
+        "major": "Computer Science",
         "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509842",
-        "major": "Data Science",
-        "year_of_study": 4,
+        "major": "Law",
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509843",
         "major": "Business Admin",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "year_of_study": 4,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509844",
-        "major": "Mechanical Engineering",
-        "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "major": "Law",
+        "year_of_study": 3,
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509845",
         "major": "Mechanical Engineering",
         "year_of_study": 1,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509846",
-        "major": "Business Admin",
-        "year_of_study": 1,
-        "study_level": "Postgraduate"
+        "major": "Computer Science",
+        "year_of_study": 4,
+        "study_level": "Undergraduate"
     },
     {
         "student_id": "2509847",
         "major": "Mechanical Engineering",
-        "year_of_study": 1,
+        "year_of_study": 2,
         "study_level": "Undergraduate"
     },
     {
         "student_id": "2509848",
         "major": "Data Science",
         "year_of_study": 4,
-        "study_level": "Undergraduate"
+        "study_level": "Postgraduate"
     },
     {
         "student_id": "2509849",
-        "major": "Computer Science",
-        "year_of_study": 1,
+        "major": "Mechanical Engineering",
+        "year_of_study": 3,
         "study_level": "Undergraduate"
     }
 ]
