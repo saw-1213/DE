@@ -5,13 +5,14 @@ import uuid
 from datetime import datetime, timedelta
 
 class LibraryDatasetGenerator:
-    def __init__(self, num_students, target_visits, date_str):
+    def __init__(self, num_students, total_target_visits, date_str, duration_in_days=5):
         self.num_students = num_students
-        self.target_visits = target_visits
+        self.total_target_visits = total_target_visits
         self.base_date = datetime.fromisoformat(date_str)
+        self.duration_in_days = duration_in_days
         self.students = []
         self.events = []
-        self.rooms = ["1A", "1B", "2A", "2B"]
+        self.rooms = ["1A", "1B", "1C", "1D", "1E", "1F", "2A", "2B", "2C", "2D", "2E", "2F"]
 
     def generate_students(self):
         majors = ["Data Science", "Computer Science", "Business Admin", "Mechanical Engineering", "Law"]
@@ -35,24 +36,27 @@ class LibraryDatasetGenerator:
             "timestamp": timestamp.strftime("%Y-%m-%dT%H:%M:%S")
         }
 
-    def _generate_arrival_time(self):
+    def _generate_arrival_time(self, visit_date):
         while True:
             hour = random.gauss(12, 2.5)
             if 8.0 <= hour <= 19.5:
                 break
-        return self.base_date + timedelta(hours=hour)
+        return visit_date + timedelta(hours=hour)
 
     def generate_events(self):
         unsorted_events = []
         
-        for _ in range(self.target_visits):
+        for _ in range(self.total_target_visits):
             student_id = random.choice(self.students)["student_id"]
             
-            arrival_time = self._generate_arrival_time()
+            random_day_offset = random.randint(0, self.duration_in_days - 1)
+            visit_date = self.base_date + timedelta(days=random_day_offset)
+            
+            arrival_time = self._generate_arrival_time(visit_date)
             stay_duration = timedelta(minutes=random.randint(30, 120))
             exit_time = arrival_time + stay_duration
             
-            closing_time = self.base_date + timedelta(hours=20)
+            closing_time = visit_date + timedelta(hours=20)
             if exit_time > closing_time:
                 exit_time = closing_time
 
@@ -91,7 +95,7 @@ class LibraryDatasetGenerator:
             writer.writerows(data)
 
 def execute_data_generation():
-    generator = LibraryDatasetGenerator(250, 2500, "2026-03-05T00:00:00")
+    generator = LibraryDatasetGenerator(num_students=250, total_target_visits=2500, date_str="2026-03-05T00:00:00", duration_in_days=5)
     generator.generate_students()
     generator.generate_events()
     
