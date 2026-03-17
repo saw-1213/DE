@@ -1,4 +1,6 @@
 {
+    "hdfs_student_path": "/user/student/library/student_details",
+    "local_student_path": "/home/student/library/dataset/students_dataset.csv",
     "kafka_broker": "localhost:9092",
     "topic_name": "library_events",
     "input_file": "/home/student/library/dataset/library_events.json",
@@ -7,7 +9,8 @@
     "HDFS_CURATED_PATH": "hdfs://localhost:9000/user/student/library/curated",
     "RAW_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/raw",
     "CURATED_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/curated",
-    "HDFS_HOURLY_REPORT_PATH": "hdfs://localhost:9000/user/student/library/reports/hourly_traffic",
+    "HDFS_HOURLY_GATE_PATH": "hdfs://localhost:9000/user/student/library/reports/hourly_traffic",
     "HDFS_DAILY_ROOM_PATH": "hdfs://localhost:9000/user/student/library/reports/daily_rooms",
+    "HDFS_HOURLY_ROOM_PATH": "hdfs://localhost:9000/user/student/library/reports/hourly_room_usage",
     "HDFS_ROOM_DURATION_PATH": "hdfs://localhost:9000/user/student/library/reports/room_durations"
 }

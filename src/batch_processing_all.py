@@ -3,7 +3,8 @@
 import json
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
-from pyspark.sql.functions import col, to_date, hour, count, max as spark_max, lead, unix_timestamp, round, current_timestamp
+from pyspark.sql.functions import col, to_date, hour, count, \
+    lead, unix_timestamp, round, current_timestamp
 
 class ConfigManager:
     def __init__(self, config_file):
@@ -24,7 +25,7 @@ class LibraryBatchProcessor:
     def load_curated_data(self):
         df = self.spark.read.parquet(self.config["HDFS_CURATED_PATH"])
         df_with_date = df.withColumn("record_date", to_date(col("timestamp")))
-        
+
         return df_with_date
 
     def perform_quality_checks(self, df):
@@ -54,6 +55,20 @@ class LibraryBatchProcessor:
             .orderBy("record_date", col("total_room_entries").desc())
             
         return room_df
+    
+    def generate_hourly_room_usage_report(self, df):
+        pax_df = df.filter((col("gate_type") == "ROOM_GATE") & (col("event_type") == "ENTRY")) \
+            .withColumn("entry_hour", hour(col("timestamp"))) \
+            .groupBy("record_date", "location", "entry_hour") \
+            .agg(count("student_id").alias("total_visits")) \
+            .select(
+                col("record_date"),
+                col("location").alias("room_id"),
+                col("entry_hour"),
+                col("total_visits")
+            ).orderBy("record_date", "room_id", "entry_hour")
+            
+        return pax_df
     
     def generate_room_duration_report(self, df):
         window_spec = Window.partitionBy("student_id", "location").orderBy("timestamp")
@@ -94,7 +109,7 @@ class LibraryBatchProcessor:
         hourly_report = self.generate_hourly_traffic_report(clean_df)
         self.save_and_display_report(
             hourly_report, 
-            self.config["HDFS_HOURLY_REPORT_PATH"], 
+            self.config["HDFS_HOURLY_GATE_PATH"], 
             "Hourly Main Gate Traffic"
         )
         
@@ -103,6 +118,13 @@ class LibraryBatchProcessor:
             daily_room_report, 
             self.config["HDFS_DAILY_ROOM_PATH"], 
             "Daily Room Usage"
+        )
+
+        hourly_room_usage_report = self.generate_hourly_room_usage_report(clean_df)
+        self.save_and_display_report(
+            hourly_room_usage_report,
+            self.config["HDFS_HOURLY_ROOM_PATH"],
+            "Hourly Room Usage"
         )
 
         room_duration_report = self.generate_room_duration_report(clean_df)

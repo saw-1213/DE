@@ -3,7 +3,8 @@
 import json
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
-from pyspark.sql.functions import col, to_date, hour, count, max as spark_max, lead, unix_timestamp, round
+from pyspark.sql.functions import col, to_date, hour, count, \
+    max, lead, unix_timestamp, round
 
 class ConfigManager:
     def __init__(self, config_file):
@@ -26,7 +27,7 @@ class LibraryBatchProcessor:
         
         df_with_date = df.withColumn("record_date", to_date(col("timestamp")))
         
-        max_date_row = df_with_date.select(spark_max("record_date")).collect()[0]
+        max_date_row = df_with_date.select(max("record_date")).collect()[0]
         latest_date = max_date_row[0]
         
         latest_df = df_with_date.filter(col("record_date") == latest_date)
@@ -82,6 +83,20 @@ class LibraryBatchProcessor:
         ).orderBy("record_date", "room_id", "entry_time")
         
         return final_report
+    
+    def generate_hourly_room_usage_report(self, df):
+        pax_df = df.filter((col("gate_type") == "ROOM_GATE") & (col("event_type") == "ENTRY")) \
+            .withColumn("entry_hour", hour(col("timestamp"))) \
+            .groupBy("record_date", "location", "entry_hour") \
+            .agg(count("student_id").alias("total_visits")) \
+            .select(
+                col("record_date"),
+                col("location").alias("room_id"),
+                col("entry_hour"),
+                col("total_visits")
+            ).orderBy("record_date", "room_id", "entry_hour")
+            
+        return pax_df
 
     def save_and_display_report(self, df, output_path, report_name):
         print(f"--- Displaying {report_name} ---")
@@ -96,7 +111,7 @@ class LibraryBatchProcessor:
         hourly_report = self.generate_hourly_traffic_report(clean_df)
         self.save_and_display_report(
             hourly_report, 
-            self.config["HDFS_HOURLY_REPORT_PATH"], 
+            self.config["HDFS_HOURLY_GATE_PATH"], 
             "Hourly Main Gate Traffic"
         )
         
@@ -112,6 +127,13 @@ class LibraryBatchProcessor:
             room_duration_report, 
             self.config["HDFS_ROOM_DURATION_PATH"],
             "Room Occupancy Durations"
+        )
+
+        hourly_room_usage_report = self.generate_hourly_room_usage_report(clean_df)
+        self.save_and_display_report(
+            hourly_room_usage_report,
+            self.config["HDFS_HOURLY_ROOM_PATH"],
+            "Hourly Room Usage"
         )
         
         self.spark.stop()
