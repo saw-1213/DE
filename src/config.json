@@ -1,7 +1,7 @@
 {
     "kafka_broker": "localhost:9092",
     "topic_name": "library_events",
-    "input_file": "~/library/library_events.json",
+    "input_file": "/home/student/library/dataset/library_events.json",
     "sleep_interval": 1.0,
     "HDFS_RAW_PATH": "hdfs://localhost:9000/user/student/library/raw",
     "HDFS_CURATED_PATH": "hdfs://localhost:9000/user/student/library/curated",
