@@ -1,8 +1,9 @@
-# Author: [Insert Your Name Here]
+# Author: Thee Hao Siang
 
 import json
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, to_date, hour, count, current_timestamp
+from pyspark.sql.window import Window
+from pyspark.sql.functions import col, to_date, hour, count, max as spark_max, lead, unix_timestamp, round, current_timestamp
 
 class ConfigManager:
     def __init__(self, config_file):
@@ -21,7 +22,10 @@ class LibraryBatchProcessor:
         self.spark.sparkContext.setLogLevel("WARN")
 
     def load_curated_data(self):
-        return self.spark.read.parquet(self.config["HDFS_CURATED_PATH"])
+        df = self.spark.read.parquet(self.config["HDFS_CURATED_PATH"])
+        df_with_date = df.withColumn("record_date", to_date(col("timestamp")))
+        
+        return df_with_date
 
     def perform_quality_checks(self, df):
         deduplicated_df = df.dropDuplicates(["event_id"])
@@ -34,29 +38,54 @@ class LibraryBatchProcessor:
 
     def generate_hourly_traffic_report(self, df):
         hourly_df = df.filter((col("gate_type") == "MAIN_GATE") & (col("event_type") == "ENTRY")) \
-            .withColumn("report_date", to_date(col("timestamp"))) \
-            .withColumn("report_hour", hour(col("timestamp"))) \
-            .groupBy("report_date", "report_hour") \
+            .withColumn("record_date", to_date(col("timestamp"))) \
+            .withColumn("record_hour", hour(col("timestamp"))) \
+            .groupBy("record_date", "record_hour") \
             .agg(count("event_id").alias("total_hourly_entries")) \
-            .orderBy("report_date", "report_hour")
+            .orderBy("record_date", "record_hour")
             
         return hourly_df
 
     def generate_daily_room_report(self, df):
         room_df = df.filter((col("gate_type") == "ROOM_GATE") & (col("event_type") == "ENTRY")) \
-            .withColumn("report_date", to_date(col("timestamp"))) \
-            .groupBy("report_date", "location") \
+            .withColumn("record_date", to_date(col("timestamp"))) \
+            .groupBy("record_date", "location") \
             .agg(count("event_id").alias("total_room_entries")) \
-            .orderBy("report_date", col("total_room_entries").desc())
+            .orderBy("record_date", col("total_room_entries").desc())
             
         return room_df
+    
+    def generate_room_duration_report(self, df):
+        window_spec = Window.partitionBy("student_id", "location").orderBy("timestamp")
+        
+        room_events = df.filter(col("gate_type") == "ROOM_GATE")
+        
+        paired_df = room_events.withColumn("exit_timestamp", lead("timestamp").over(window_spec)) \
+                               .withColumn("next_event", lead("event_type").over(window_spec))
+        
+        visits_df = paired_df.filter((col("event_type") == "ENTRY") & (col("next_event") == "EXIT"))
+        
+        duration_df = visits_df.withColumn(
+            "occupied_minutes",
+            round((unix_timestamp(col("exit_timestamp")) - unix_timestamp(col("timestamp"))) / 60, 2)
+        )
+        
+        final_report = duration_df.select(
+            col("record_date"),
+            col("location").alias("room_id"),
+            col("student_id"),
+            col("timestamp").alias("entry_time"),
+            col("exit_timestamp").alias("exit_time"),
+            col("occupied_minutes")
+        ).orderBy("record_date", "room_id", "entry_time")
+        
+        return final_report
 
     def save_and_display_report(self, df, output_path, report_name):
         print(f"--- Displaying {report_name} ---")
         df.show(20, truncate=False)
         
-        df.write.mode("overwrite") \
-            .parquet(output_path)
+        df.write.mode("overwrite").parquet(output_path)
 
     def execute_batch_pipeline(self):
         raw_curated_df = self.load_curated_data()
@@ -74,6 +103,13 @@ class LibraryBatchProcessor:
             daily_room_report, 
             self.config["HDFS_DAILY_ROOM_PATH"], 
             "Daily Room Usage"
+        )
+
+        room_duration_report = self.generate_room_duration_report(clean_df)
+        self.save_and_display_report(
+            room_duration_report, 
+            self.config["HDFS_ROOM_DURATION_PATH"],
+            "Room Occupancy Durations"
         )
         
         self.spark.stop()

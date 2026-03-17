@@ -42,10 +42,10 @@ class LibraryBatchProcessor:
 
     def generate_hourly_traffic_report(self, df):
         hourly_df = df.filter((col("gate_type") == "MAIN_GATE") & (col("event_type") == "ENTRY")) \
-            .withColumn("report_hour", hour(col("timestamp"))) \
-            .groupBy("record_date", "report_hour") \
+            .withColumn("record_hour", hour(col("timestamp"))) \
+            .groupBy("record_date", "record_hour") \
             .agg(count("event_id").alias("total_hourly_entries")) \
-            .orderBy("record_date", "report_hour")
+            .orderBy("record_date", "record_hour")
             
         return hourly_df
 
@@ -68,7 +68,7 @@ class LibraryBatchProcessor:
         visits_df = paired_df.filter((col("event_type") == "ENTRY") & (col("next_event") == "EXIT"))
         
         duration_df = visits_df.withColumn(
-            "occupied_duration_minutes",
+            "occupied_minutes",
             round((unix_timestamp(col("exit_timestamp")) - unix_timestamp(col("timestamp"))) / 60, 2)
         )
         
@@ -87,8 +87,7 @@ class LibraryBatchProcessor:
         print(f"--- Displaying {report_name} ---")
         df.show(20, truncate=False)
         
-        df.write.mode("append") \
-            .parquet(output_path)
+        df.write.mode("append").parquet(output_path)
 
     def execute_batch_pipeline(self):
         latest_curated_df = self.load_latest_curated_data()
