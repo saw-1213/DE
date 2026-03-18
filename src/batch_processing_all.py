@@ -4,7 +4,7 @@ import json
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql.functions import col, to_date, hour, count, \
-    lead, unix_timestamp, round, current_timestamp
+    lead, unix_timestamp, round, current_timestamp, when, sum
 
 class ConfigManager:
     def __init__(self, config_file):
@@ -38,10 +38,13 @@ class LibraryBatchProcessor:
         return valid_df
 
     def generate_hourly_traffic_report(self, df):
-        hourly_df = df.filter((col("gate_type") == "MAIN_GATE") & (col("event_type") == "ENTRY")) \
+        hourly_df = df.filter(col("gate_type") == "MAIN_GATE") \
             .withColumn("record_hour", hour(col("timestamp"))) \
             .groupBy("record_date", "record_hour") \
-            .agg(count("event_id").alias("total_hourly_entries")) \
+            .agg(
+                sum(when(col("event_type" == "ENTRY", 1).otherwise(0))).alias("total_hourly_entries"), \
+                sum(when(col("event_type" == "EXIT", 1).otherwise(0))).alias("total_hourly_exits") \
+            ) \
             .orderBy("record_date", "record_hour")
             
         return hourly_df
@@ -55,16 +58,20 @@ class LibraryBatchProcessor:
         return room_df
     
     def generate_hourly_room_usage_report(self, df):
-        pax_df = df.filter((col("gate_type") == "ROOM_GATE") & (col("event_type") == "ENTRY")) \
-            .withColumn("entry_hour", hour(col("timestamp"))) \
-            .groupBy("record_date", "location", "entry_hour") \
-            .agg(count("student_id").alias("total_visits")) \
+        pax_df = df.filter(col("gate_type") == "ROOM_GATE") \
+            .withColumn("record_hour", hour(col("timestamp"))) \
+            .groupBy("record_date", "location", "record_hour") \
+            .agg(
+                sum(when(col("event_type" == "ENTRY", 1).otherwise(0))).alias("total_entries"), \
+                sum(when(col("event_type" == "EXIT", 1).otherwise(0))).alias("total_exits") \
+            ) \
             .select(
                 col("record_date"),
                 col("location").alias("room_id"),
-                col("entry_hour"),
-                col("total_visits")
-            ).orderBy("record_date", "room_id", "entry_hour")
+                col("record_hour"),
+                col("total_entries"),
+                col("total_exits")
+            ).orderBy("record_date", "room_id", "record_hour")
             
         return pax_df
     
