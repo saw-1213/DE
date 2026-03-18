@@ -39,7 +39,6 @@ class LibraryBatchProcessor:
 
     def generate_hourly_traffic_report(self, df):
         hourly_df = df.filter((col("gate_type") == "MAIN_GATE") & (col("event_type") == "ENTRY")) \
-            .withColumn("record_date", to_date(col("timestamp"))) \
             .withColumn("record_hour", hour(col("timestamp"))) \
             .groupBy("record_date", "record_hour") \
             .agg(count("event_id").alias("total_hourly_entries")) \
@@ -49,7 +48,6 @@ class LibraryBatchProcessor:
 
     def generate_daily_room_report(self, df):
         room_df = df.filter((col("gate_type") == "ROOM_GATE") & (col("event_type") == "ENTRY")) \
-            .withColumn("record_date", to_date(col("timestamp"))) \
             .groupBy("record_date", "location") \
             .agg(count("event_id").alias("total_room_entries")) \
             .orderBy("record_date", col("total_room_entries").desc())
