@@ -2,19 +2,17 @@ import json
 import time
 from kafka import KafkaProducer
 
-class ConfigManager:
+class LibraryEventProducer:
     def __init__(self, config_file):
         with open(config_file, 'r') as file:
-            self.config = json.load(file)
+            config = json.load(file)
 
-    def get_config(self):
-        return self.config
-
-class LibraryEventProducer:
-    def __init__(self, broker, topic):
-        self.topic = topic
+        self.topic = config['topic_name']
+        self.input_file = config['input_file']
+        self.delay = config['sleep_interval']
+      
         self.producer = KafkaProducer(
-            bootstrap_servers=broker,
+            bootstrap_servers=config['kafka_broker'],
             value_serializer=lambda v: json.dumps(v).encode('utf-8')
         )
 
@@ -28,18 +26,8 @@ class LibraryEventProducer:
             time.sleep(delay)
 
 def run_producer():
-    config_mgr = ConfigManager('config.json')
-    settings = config_mgr.get_config()
+    producer = LibraryEventProducer('config.json')
+    producer.send_events()
     
-    event_producer = LibraryEventProducer(
-        settings['kafka_broker'], 
-        settings['topic_name']
-    )
-    
-    event_producer.send_events(
-        settings['input_file'], 
-        settings['sleep_interval']
-    )
-
 if __name__ == "__main__":
     run_producer()
