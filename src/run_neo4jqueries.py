@@ -49,7 +49,7 @@ def run_query_1():
 
 def run_query_2():
     print("\n" + "=" * 150)
-    print("QUERY 2: Student Library Visits by Hour (Major and Year Breakdown)")
+    print("QUERY 2: Student Library Visits by Hour (Major and Year)")
     print("=" * 150)
     with driver.session() as session:
         result = session.run("""
@@ -61,34 +61,35 @@ def run_query_2():
               AND s.year_of_study IS NOT NULL
             WITH s.major as major,
                  s.year_of_study as year,
-                 e.timestamp.hour as hour,
-                 COUNT(*) as total_visits,
-                 COUNT(DISTINCT e.student_id) as unique_students
+                 (e.timestamp + duration({hours: 8})).hour as local_hour,
+                 e.student_id as student_id
+            WITH major, year, local_hour, student_id
             RETURN major,
                    year,
+                   local_hour,
                    CASE
-                     WHEN hour = 0 THEN '12:00 AM'
-                     WHEN hour < 12 THEN toString(hour) + ':00 AM'
-                     WHEN hour = 12 THEN '12:00 PM'
-                     ELSE toString(hour - 12) + ':00 PM'
+                     WHEN local_hour = 0 THEN '12:00 AM'
+                     WHEN local_hour < 12 THEN toString(local_hour) + ':00 AM'
+                     WHEN local_hour = 12 THEN '12:00 PM'
+                     ELSE toString(local_hour - 12) + ':00 PM'
                    END as time,
                    CASE
-                     WHEN hour >= 6 AND hour <= 11 THEN 'Morning (6am-11am)'
-                     WHEN hour >= 12 AND hour <= 16 THEN 'Afternoon (12pm-4pm)'
-                     WHEN hour >= 17 AND hour <= 20 THEN 'Evening (5pm-8pm)'
+                     WHEN local_hour >= 6 AND local_hour <= 11 THEN 'Morning (6am-11am)'
+                     WHEN local_hour >= 12 AND local_hour <= 16 THEN 'Afternoon (12pm-4pm)'
+                     WHEN local_hour >= 17 AND local_hour <= 20 THEN 'Evening (5pm-8pm)'
                      ELSE 'Night (9pm-5am)'
                    END as time_period,
-                   total_visits,
-                   unique_students
-            ORDER BY major, year, hour
+                   COUNT(*) as visits,
+                   COUNT(DISTINCT student_id) as unique_students
+            ORDER BY major, year, local_hour
         """)
 
-        print(f"{'Major':<30} {'Year':<6} {'Time':<12} {'Period':<30} {'Total Visits':<12} {'Unique Students':<16}")
+        print(f"{'Major':<30} {'Year':<6} {'Hour':<6} {'Time':<12} {'Period':<35} {'Visits':<10} {'Unique Students':<16}")
         print("-" * 150)
         for record in result:
-            print(f"{record['major']:<30} {record['year']:<6} "
-                  f"{record['time']:<12} {record['time_period']:<30} "
-                  f"{record['total_visits']:<12} {record['unique_students']:<16}")
+            print(f"{record['major']:<30} {record['year']:<6} {record['local_hour']:<6} "
+                  f"{record['time']:<12} {record['time_period']:<35} "
+                  f"{record['visits']:<10} {record['unique_students']:<16}")
 
 def run_summary():
     print("\n" + "=" * 70)
@@ -98,39 +99,53 @@ def run_summary():
         result = session.run("""
             MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
             WHERE e.event_type = 'ENTRY'
+            WITH e, date(e.timestamp + duration({hours: 8})) as local_date
             RETURN COUNT(*) as total_entries,
                    COUNT(DISTINCT e.student_id) as unique_students,
-                   COUNT(DISTINCT date(e.timestamp)) as unique_days
+                   COUNT(DISTINCT local_date) as unique_days
         """)
         for record in result:
-            print(f"Total Library Entries: {record['total_entries']}")
-            print(f"Unique Students: {record['unique_students']}")
-            print(f"Unique Days: {record['unique_days']}")
-            print(f"Average Visits per Student: {record['total_entries'] / record['unique_students']:.1f}")
-            print(f"Average Daily Visits: {record['total_entries'] / record['unique_days']:.1f}")
+            total = record['total_entries']
+            students = record['unique_students']
+            days = record['unique_days']
+            visits_per_student = total / students
+            visits_per_day = total / days
+            visits_per_student_per_day = visits_per_student / days
+
+            print(f"Total Library Entries: {total}")
+            print(f"Unique Students: {students}")
+            print(f"Unique Days: {days}")
+            print(f"\nAverages:")
+            print(f"  • Average Visits per Student (total over {days} days): {visits_per_student:.1f}")
+            print(f"  • Average Daily Visits: {visits_per_day:.1f}")
+            print(f"  • Average Visits per Student per Day: {visits_per_student_per_day:.2f} visits/day")
+            print(f"\nSummary:")
+            print(f"  Each student visited the library about {visits_per_student:.0f} times total")
+            print(f"  That's roughly {visits_per_student_per_day:.1f} time(s) per day")
 
 def run_peak_hours():
     print("\n" + "=" * 70)
-    print("PEAK HOURS ANALYSIS (All Majors Combined)")
+    print("PEAK HOURS ANALYSIS")
     print("=" * 70)
     with driver.session() as session:
         result = session.run("""
             MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
             WHERE e.event_type = 'ENTRY'
-            RETURN e.timestamp.hour as hour,
+            WITH (e.timestamp + duration({hours: 8})).hour as local_hour
+            RETURN local_hour,
                    CASE
-                     WHEN e.timestamp.hour = 0 THEN '12:00 AM'
-                     WHEN e.timestamp.hour < 12 THEN toString(e.timestamp.hour) + ':00 AM'
-                     WHEN e.timestamp.hour = 12 THEN '12:00 PM'
-                     ELSE toString(e.timestamp.hour - 12) + ':00 PM'
+                     WHEN local_hour = 0 THEN '12:00 AM'
+                     WHEN local_hour < 12 THEN toString(local_hour) + ':00 AM'
+                     WHEN local_hour = 12 THEN '12:00 PM'
+                     ELSE toString(local_hour - 12) + ':00 PM'
                    END as time,
                    COUNT(*) as visits
             ORDER BY visits DESC
             LIMIT 5
         """)
-        print("Top 5 Peak Hours:")
+        print("Top 5 Peak Hours (Local Time):")
         for record in result:
-            print(f"  {record['time']} ({record['hour']}:00) - {record['visits']} visits")
+            print(f"  {record['time']} ({record['local_hour']}:00) - {record['visits']} visits")
 
 def run_most_popular_rooms():
     print("\n" + "=" * 70)
