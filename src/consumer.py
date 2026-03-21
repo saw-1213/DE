@@ -9,10 +9,9 @@ class LibraryStreamProcessor:
         with open('config.json', 'r') as config_file:
             self.config = json.load(config_file)
 
-        # Neo4j connection
         self.neo4j_driver = GraphDatabase.driver(
-            "neo4j+s://7245d5b4.databases.neo4j.io",
-            auth=("7245d5b4", "HHH-M3WJbojBqY0jNsswMFj1FjODPiN7qZyZKkWccIg")
+            self.config["neo4j_uri"],
+            auth=(self.config["neo4j_username"], self.config["neo4j_password"])
         )
 
         self.spark = SparkSession.builder \
@@ -77,20 +76,17 @@ class LibraryStreamProcessor:
             .select("data.*") \
             .filter(col("event_id").isNotNull())
 
-        # Function to write batch to Neo4j
         def write_to_neo4j_batch(batch_df, batch_id):
             events = batch_df.collect()
             for event in events:
                 self.write_to_neo4j(event.asDict())
 
-        # Write to HDFS
         hdfs_query = parsed_df.writeStream \
             .format("parquet") \
             .option("path", self.config["HDFS_CURATED_PATH"]) \
             .option("checkpointLocation", self.config["CURATED_CHECKPOINT"]) \
             .start()
 
-        # Write to Neo4j
         neo4j_query = parsed_df.writeStream \
             .foreachBatch(write_to_neo4j_batch) \
             .start()

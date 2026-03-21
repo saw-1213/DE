@@ -1,10 +1,30 @@
+import json
 from neo4j import GraphDatabase
 
-uri = "neo4j+s://7245d5b4.databases.neo4j.io"
-username = "7245d5b4"
-password = "HHH-M3WJbojBqY0jNsswMFj1FjODPiN7qZyZKkWccIg"
+class ConfigManager:
+    def __init__(self, config_file='config.json'):
+        with open(config_file, 'r') as file:
+            self.config = json.load(file)
+    
+    def get_config(self):
+        return self.config
+    
+    def get_neo4j_config(self):
+        """Get Neo4j configuration from config"""
+        return {
+            'uri': self.config['neo4j_uri'],
+            'username': self.config['neo4j_username'],
+            'password': self.config['neo4j_password']
+        }
 
-driver = GraphDatabase.driver(uri, auth=(username, password))
+config_mgr = ConfigManager()
+config = config_mgr.get_config()
+neo4j_config = config_mgr.get_neo4j_config()
+
+driver = GraphDatabase.driver(
+    neo4j_config['uri'], 
+    auth=(neo4j_config['username'], neo4j_config['password'])
+)
 
 def run_query_1():
     print("=" * 150)

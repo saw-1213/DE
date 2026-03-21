@@ -12,5 +12,8 @@
     "HDFS_HOURLY_GATE_PATH": "hdfs://localhost:9000/user/student/library/reports/hourly_traffic",
     "HDFS_DAILY_ROOM_PATH": "hdfs://localhost:9000/user/student/library/reports/daily_rooms",
     "HDFS_HOURLY_ROOM_PATH": "hdfs://localhost:9000/user/student/library/reports/hourly_room_usage",
-    "HDFS_ROOM_DURATION_PATH": "hdfs://localhost:9000/user/student/library/reports/room_durations"
+    "HDFS_ROOM_DURATION_PATH": "hdfs://localhost:9000/user/student/library/reports/room_durations",
+    "neo4j_uri": "neo4j+s://7245d5b4.databases.neo4j.io",
+    "neo4j_username": "7245d5b4",
+    "neo4j_password": "HHH-M3WJbojBqY0jNsswMFj1FjODPiN7qZyZKkWccIg"
 }
