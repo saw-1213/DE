@@ -7,7 +7,8 @@ class LibraryEventProducer:
         with open(config_file, 'r') as file:
             config = json.load(file)
 
-        self.topic = config['topic_name']
+        self.topic_main = config['topic_main_gate']
+        self.topic_room = config['topic_room_gate']
         self.input_file = config['input_file']
         self.delay = config['sleep_interval']
       
@@ -16,14 +17,19 @@ class LibraryEventProducer:
             value_serializer=lambda v: json.dumps(v).encode('utf-8')
         )
 
-    def send_events(self, file_path, delay):
-        with open(file_path, 'r') as file:
+    def send_events(self):
+        with open(self.input_file, 'r') as file:
             events = json.load(file)
 
         for event in events:
-            self.producer.send(self.topic, event)
+            if event['gate_type'] == 'MAIN_GATE':
+                self.producer.send(self.topic_main, event)
+                print(f"Sent to {self.topic_main}: {event['event_id']}")
+            elif event['gate_type'] == 'ROOM_GATE':
+                self.producer.send(self.topic_room, event)
+                print(f"Sent to {self.topic_room}: {event['event_id']}")
             print(event)
-            time.sleep(delay)
+            time.sleep(self.delay)
 
 def run_producer():
     producer = LibraryEventProducer('config.json')
