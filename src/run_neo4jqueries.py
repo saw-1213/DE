@@ -49,47 +49,73 @@ def run_query_1():
 
 def run_query_2():
     print("\n" + "=" * 150)
-    print("QUERY 2: Student Library Visits by Hour (Major and Year)")
+    print("QUERY 2: Daily Library Visits by Time Period with Top Most Visited Major and Year")
     print("=" * 150)
     with driver.session() as session:
         result = session.run("""
-            MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
-            WHERE e.timestamp IS NOT NULL
-              AND e.event_type = 'ENTRY'
-            OPTIONAL MATCH (s:Student {student_id: e.student_id})
-            WHERE s.major IS NOT NULL
-              AND s.year_of_study IS NOT NULL
-            WITH s.major as major,
-                 s.year_of_study as year,
-                 (e.timestamp + duration({hours: 8})).hour as local_hour,
-                 e.student_id as student_id
-            WITH major, year, local_hour, student_id
-            RETURN major,
-                   year,
-                   local_hour,
-                   CASE
-                     WHEN local_hour = 0 THEN '12:00 AM'
-                     WHEN local_hour < 12 THEN toString(local_hour) + ':00 AM'
-                     WHEN local_hour = 12 THEN '12:00 PM'
-                     ELSE toString(local_hour - 12) + ':00 PM'
-                   END as time,
-                   CASE
-                     WHEN local_hour >= 6 AND local_hour <= 11 THEN 'Morning (6am-11am)'
-                     WHEN local_hour >= 12 AND local_hour <= 16 THEN 'Afternoon (12pm-4pm)'
-                     WHEN local_hour >= 17 AND local_hour <= 20 THEN 'Evening (5pm-8pm)'
-                     ELSE 'Night (9pm-5am)'
-                   END as time_period,
-                   COUNT(*) as visits,
-                   COUNT(DISTINCT student_id) as unique_students
-            ORDER BY major, year, local_hour
+           MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
+                WHERE e.timestamp IS NOT NULL
+                AND e.event_type = 'ENTRY'
+                AND e.timestamp >= datetime() - duration({days: 30})
+                OPTIONAL MATCH (s:Student {student_id: e.student_id})
+                WHERE s.major IS NOT NULL
+                AND s.year_of_study IS NOT NULL
+                WITH date(e.timestamp) as visit_date,
+                CASE
+                        WHEN (e.timestamp + duration({hours: 8})).hour >= 6 AND (e.timestamp + duration({hours: 8})).hour <= 11 THEN 'Morning'
+                        WHEN (e.timestamp + duration({hours: 8})).hour >= 12 AND (e.timestamp + duration({hours: 8})).hour <= 16 THEN 'Afternoon'
+                        WHEN (e.timestamp + duration({hours: 8})).hour >= 17 AND (e.timestamp + duration({hours: 8})).hour <= 20 THEN 'Evening'
+                ELSE 'Night'
+                END as time_period, e.student_id as student_id, s.major as major, s.year_of_study as year
+                // First aggregate by date, time period, major, and year to get counts
+                WITH visit_date, time_period, major, year,
+                        COUNT(*) as year_major_visits,
+                        COUNT(DISTINCT student_id) as unique_students_in_group
+                // Now aggregate by date, time period, and major to collect year data
+                WITH visit_date, time_period, major,
+                        COLLECT({year: year, visits: year_major_visits}) as year_counts,
+                        SUM(year_major_visits) as total_major_visits
+                // For each date and time period, find the top major
+                WITH visit_date, time_period,
+                        COLLECT({major: major, total_visits: total_major_visits, year_counts: year_counts}) as majors
+                WITH visit_date, time_period,
+                        REDUCE(best = HEAD(majors), m in TAIL(majors) |
+                CASE WHEN m.total_visits > best.total_visits THEN m ELSE best END) as top_major
+                WITH visit_date, time_period,
+                        top_major.major as most_visited_major,
+                        top_major.year_counts as year_counts
+                // For the top major, find the most common year
+                WITH visit_date, time_period, most_visited_major,
+                REDUCE(best = HEAD(year_counts), y in TAIL(year_counts) |
+                CASE WHEN y.visits > best.visits THEN y ELSE best END) as top_year
+                // Now get the total visits and unique students for each date and time period
+                OPTIONAL MATCH (e2:Event)-[:AT_LIBRARY]->(l:Library)
+                WHERE date(e2.timestamp) = visit_date AND e2.event_type = 'ENTRY' AND e2.timestamp >= datetime() - duration({days: 30})
+                 AND CASE
+                WHEN (e2.timestamp + duration({hours: 8})).hour >= 6 AND (e2.timestamp + duration({hours: 8})).hour <= 11 THEN 'Morning'
+                WHEN (e2.timestamp + duration({hours: 8})).hour >= 12 AND (e2.timestamp + duration({hours: 8})).hour <= 16 THEN 'Afternoon'
+                WHEN (e2.timestamp + duration({hours: 8})).hour >= 17 AND (e2.timestamp + duration({hours: 8})).hour <= 20 THEN 'Evening'
+                ELSE 'Night'
+                END = time_period
+                WITH visit_date, time_period,
+                COUNT(DISTINCT e2.student_id) as unique_students,
+                COUNT(*) as visits, most_visited_major, top_year.year as most_visited_major_study_year
+                RETURN toString(visit_date) as visit_date, time_period, visits, unique_students, most_visited_major, most_visited_major_study_year
+                ORDER BY visit_date DESC,
+                CASE time_period
+                WHEN 'Morning' THEN 1
+                WHEN 'Afternoon' THEN 2
+                WHEN 'Evening' THEN 3
+                WHEN 'Night' THEN 4
+                END
         """)
 
-        print(f"{'Major':<30} {'Year':<6} {'Hour':<6} {'Time':<12} {'Period':<35} {'Visits':<10} {'Unique Students':<16}")
+        print(f"{'Date':<15} {'Time Period':<20} {'Visits':<15} {'Unique Students':<18} {'Top Most Visited Major':<30} {'Top Most Visited Major Study Year':<25}")
         print("-" * 150)
         for record in result:
-            print(f"{record['major']:<30} {record['year']:<6} {record['local_hour']:<6} "
-                  f"{record['time']:<12} {record['time_period']:<35} "
-                  f"{record['visits']:<10} {record['unique_students']:<16}")
+            print(f"{record['visit_date']:<15} {record['time_period']:<20} "
+                  f"{record['visits']:<15} {record['unique_students']:<18} "
+                  f"{record['most_visited_major']:<30} {record['most_visited_major_study_year']:<25}")
 
 def run_summary():
     print("\n" + "=" * 70)
