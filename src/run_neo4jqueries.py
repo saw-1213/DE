@@ -67,15 +67,15 @@ def run_query_2():
                         WHEN (e.timestamp + duration({hours: 8})).hour >= 17 AND (e.timestamp + duration({hours: 8})).hour <= 20 THEN 'Evening'
                 ELSE 'Night'
                 END as time_period, e.student_id as student_id, s.major as major, s.year_of_study as year
-                // First aggregate by date, time period, major, and year to get counts
+                
                 WITH visit_date, time_period, major, year,
                         COUNT(*) as year_major_visits,
                         COUNT(DISTINCT student_id) as unique_students_in_group
-                // Now aggregate by date, time period, and major to collect year data
+
                 WITH visit_date, time_period, major,
                         COLLECT({year: year, visits: year_major_visits}) as year_counts,
                         SUM(year_major_visits) as total_major_visits
-                // For each date and time period, find the top major
+                
                 WITH visit_date, time_period,
                         COLLECT({major: major, total_visits: total_major_visits, year_counts: year_counts}) as majors
                 WITH visit_date, time_period,
@@ -84,11 +84,11 @@ def run_query_2():
                 WITH visit_date, time_period,
                         top_major.major as most_visited_major,
                         top_major.year_counts as year_counts
-                // For the top major, find the most common year
+                
                 WITH visit_date, time_period, most_visited_major,
                 REDUCE(best = HEAD(year_counts), y in TAIL(year_counts) |
                 CASE WHEN y.visits > best.visits THEN y ELSE best END) as top_year
-                // Now get the total visits and unique students for each date and time period
+                
                 OPTIONAL MATCH (e2:Event)-[:AT_LIBRARY]->(l:Library)
                 WHERE date(e2.timestamp) = visit_date AND e2.event_type = 'ENTRY' AND e2.timestamp >= datetime() - duration({days: 30})
                  AND CASE
