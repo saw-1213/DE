@@ -6,27 +6,14 @@ class ConfigManager:
         with open(config_file, 'r') as file:
             self.config = json.load(file)
     
-    def get_config(self):
-        return self.config
-    
     def get_neo4j_config(self):
-        """Get Neo4j configuration from config"""
         return {
             'uri': self.config['neo4j_uri'],
             'username': self.config['neo4j_username'],
             'password': self.config['neo4j_password']
         }
 
-config_mgr = ConfigManager()
-config = config_mgr.get_config()
-neo4j_config = config_mgr.get_neo4j_config()
-
-driver = GraphDatabase.driver(
-    neo4j_config['uri'], 
-    auth=(neo4j_config['username'], neo4j_config['password'])
-)
-
-def run_query_1():
+def run_query_1(driver):
     print("=" * 150)
     print("QUERY 1: Top 5 Popular Rooms by Major and Year")
     print("=" * 150)
@@ -67,7 +54,7 @@ def run_query_1():
                   f"{record['top_room_4']:<12} {record['visits_4']:<8} "
                   f"{record['top_room_5']:<12} {record['visits_5']:<8}")
 
-def run_query_2():
+def run_query_2(driver):
     print("\n" + "=" * 150)
     print("QUERY 2: Daily Library Visits by Time Period with Top Most Visited Major and Year")
     print("=" * 150)
@@ -137,7 +124,7 @@ def run_query_2():
                   f"{record['visits']:<15} {record['unique_students']:<18} "
                   f"{record['most_visited_major']:<30} {record['most_visited_major_study_year']:<25}")
 
-def run_summary():
+def run_summary(driver):
     print("\n" + "=" * 70)
     print("SUMMARY STATISTICS")
     print("=" * 70)
@@ -169,7 +156,7 @@ def run_summary():
             print(f"  Each student visited the library about {visits_per_student:.0f} times total")
             print(f"  That's roughly {visits_per_student_per_day:.1f} time(s) per day")
 
-def run_peak_hours():
+def run_peak_hours(driver):
     print("\n" + "=" * 70)
     print("PEAK HOURS ANALYSIS")
     print("=" * 70)
@@ -193,7 +180,7 @@ def run_peak_hours():
         for record in result:
             print(f"  {record['time']} ({record['local_hour']}:00) - {record['visits']} visits")
 
-def run_most_popular_rooms():
+def run_most_popular_rooms(driver):
     print("\n" + "=" * 70)
     print("MOST POPULAR ROOMS (Overall)")
     print("=" * 70)
@@ -211,11 +198,58 @@ def run_most_popular_rooms():
         for record in result:
             print(f"  Room {record['room']}: {record['visits']} visits")
 
-# Run all queries
-run_query_1()
-run_query_2()
-run_summary()
-run_peak_hours()
-run_most_popular_rooms()
+def main():
+    print("=" * 70)
+    print("LIBRARY ANALYTICS - NEO4J QUERIES")
+    print("=" * 70)
 
-driver.close()
+    try:
+        # Load configuration
+        config_mgr = ConfigManager('config.json')
+        neo4j_config = config_mgr.get_neo4j_config()
+
+        # Connect to Neo4j
+        driver = GraphDatabase.driver(
+            neo4j_config['uri'],
+            auth=(neo4j_config['username'], neo4j_config['password'])
+        )
+        
+        driver.verify_connectivity()
+        print("Successfully connected to Neo4j\n")
+
+        # Check if data exists
+        with driver.session() as session:
+            result = session.run("MATCH (e:Event) RETURN count(e) as event_count")
+            event_count = result.single()['event_count']
+
+            if event_count == 0:
+                print("WARNING: No data found in Neo4j database!")
+                print("Please run batch_processing_all.py first to load data from HDFS into Neo4j")
+                return
+
+            print(f"Found {event_count} events in Neo4j. Running queries...\n")
+
+        # Run all queries
+        run_query_1(driver)
+        run_query_2(driver)
+        run_summary(driver)
+        run_peak_hours(driver)
+        run_most_popular_rooms(driver)
+
+    except FileNotFoundError:
+        print("\nError: config.json not found in current directory")
+        print("Make sure config.json exists with Neo4j connection details")
+    except KeyError as e:
+        print(f"\nError: Missing key in config.json: {e}")
+        print("Make sure config.json has: neo4j_uri, neo4j_username, neo4j_password")
+    except Exception as e:
+        print(f"\nError: {e}")
+    finally:
+        if 'driver' in locals():
+            driver.close()
+            print("\n" + "=" * 70)
+            print("ANALYTICS COMPLETE")
+            print("=" * 70)
+
+if __name__ == "__main__":
+    main()
