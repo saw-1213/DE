@@ -1,3 +1,4 @@
+source /home/student/de-venv/bin/activate
 python data_generator.py
 python upload_students.py
 python producer.py
