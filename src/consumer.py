@@ -42,14 +42,12 @@ class LibraryStreamProcessor:
 
 
     def write_curated(self, df):
-        parsed_df = df.selectExpr("CAST(value AS STRING)") \
-            .select(from_json(col("value"), self.schema).alias("data"), col("topic")) \
+        parsed_df = df.select(from_json(col("value").cast("string"), self.schema).alias("data")) \
             .select("data.*") \
             .filter(col("event_id").isNotNull())
 
         hdfs_query = parsed_df.writeStream \
             .format("parquet") \
-            .partitionBy("gate_type") \
             .option("path", self.config["HDFS_CURATED_PATH"]) \
             .option("checkpointLocation", self.config["CURATED_CHECKPOINT"]) \
             .start()
@@ -62,7 +60,9 @@ class LibraryStreamProcessor:
         raw_query = self.write_raw(raw_stream_df)
         hdfs_query = self.write_curated(raw_stream_df)
 
-        print("Pipeline started - writing to both HDFS and Neo4j")
+        print("\n==================================")
+        print("Pipeline started - writing to HDFS")
+        print("==================================\n")
         self.spark.streams.awaitAnyTermination()
 
 if __name__ == "__main__":

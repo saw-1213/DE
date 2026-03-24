@@ -5,7 +5,6 @@ from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql.functions import col, to_date, hour, count, \
     lead, unix_timestamp, round, current_timestamp, when, sum as spark_sum
-from neo4j import GraphDatabase
 
 class ConfigManager:
     def __init__(self, config_file):
@@ -43,8 +42,8 @@ class LibraryBatchProcessor:
             .withColumn("record_hour", hour(col("timestamp"))) \
             .groupBy("record_date", "record_hour") \
             .agg(
-                spark_sum(when(col("event_type" == "ENTRY", 1).otherwise(0))).alias("total_hourly_entries"), \
-                spark_sum(when(col("event_type" == "EXIT", 1).otherwise(0))).alias("total_hourly_exits") \
+                spark_sum(when(col("event_type") == "ENTRY", 1).otherwise(0)).alias("total_hourly_entries"), \
+                spark_sum(when(col("event_type") == "EXIT", 1).otherwise(0)).alias("total_hourly_exits") \
             ) \
             .orderBy("record_date", "record_hour")
             
@@ -63,8 +62,8 @@ class LibraryBatchProcessor:
             .withColumn("record_hour", hour(col("timestamp"))) \
             .groupBy("record_date", "location", "record_hour") \
             .agg(
-                spark_sum(when(col("event_type" == "ENTRY", 1).otherwise(0))).alias("total_entries"), \
-                spark_sum(when(col("event_type" == "EXIT", 1).otherwise(0))).alias("total_exits") \
+                spark_sum(when(col("event_type") == "ENTRY", 1).otherwise(0)).alias("total_entries"), \
+                spark_sum(when(col("event_type") == "EXIT", 1).otherwise(0)).alias("total_exits") \
             ) \
             .select(
                 col("record_date"),
