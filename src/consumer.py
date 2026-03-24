@@ -30,6 +30,7 @@ class LibraryStreamProcessor:
             .option("subscribe", self.config["topic_name"]) \
             .option("startingOffsets", "earliest") \
             .option("failOnDataLoss", "false") \
+            .option("maxOffsetsPerTrigger", 25) \
             .load()
 
     def write_raw(self, df):
@@ -38,6 +39,7 @@ class LibraryStreamProcessor:
             .format("text") \
             .option("path", self.config["HDFS_RAW_PATH"]) \
             .option("checkpointLocation", self.config["RAW_CHECKPOINT"]) \
+            .trigger(processingTime="5 seconds") \
             .start()
 
 
@@ -50,6 +52,7 @@ class LibraryStreamProcessor:
             .format("parquet") \
             .option("path", self.config["HDFS_CURATED_PATH"]) \
             .option("checkpointLocation", self.config["CURATED_CHECKPOINT"]) \
+            .trigger(processingTime="5 seconds") \
             .start()
 
         return hdfs_query
