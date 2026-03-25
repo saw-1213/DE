@@ -2,6 +2,8 @@ import json
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType
+from kafka.admin import KafkaAdminClient, NewTopic
+from kafka.errors import TopicAlreadyExistsError
 
 class LibraryStreamProcessor:
     def __init__(self):
@@ -22,6 +24,30 @@ class LibraryStreamProcessor:
             StructField("location", StringType(), True),
             StructField("timestamp", TimestampType(), True)
         ])
+
+    def setup_kafka_topics(self):
+        print("\n[Init] Checking Kafka Topics...")
+        try:
+            admin_client = KafkaAdminClient(
+                bootstrap_servers=self.config["kafka_broker"],
+                client_id='consumer_setup'
+            )
+            
+            topic_list = [
+                NewTopic(name="main_gate_events", num_partitions=1, replication_factor=1),
+                NewTopic(name="room_gate_events", num_partitions=1, replication_factor=1)
+            ]
+            
+            admin_client.create_topics(new_topics=topic_list, validate_only=False)
+            print("Topics 'main_gate_events' and 'room_gate_events' created successfully!")
+            
+        except TopicAlreadyExistsError:
+            print("Topics already exist. Safe to proceed.")
+        except Exception as e:
+            print(f"Warning during topic creation: {e}")
+        finally:
+            if 'admin_client' in locals():
+                admin_client.close()
 
     def read_stream(self):
         return self.spark.readStream \
