@@ -24,7 +24,6 @@ def run_pipeline():
     print("Ensure HDFS, Zookeeper, and Kafka are already running!\n")
     time.sleep(3)
 
-    # 2. Update the producer command based on the flag
     consumer_cmd = "spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 --driver-memory 1g --executor-memory 1g consumer.py"
     producer_cmd = "python producer.py --fast" if is_fast_mode else "python producer.py"
     batch_cmd = "spark-submit --driver-memory 1g batch_processing_all.py"
@@ -33,25 +32,20 @@ def run_pipeline():
     consumer_process = None
 
     try:
-        # Phase 1: Consumer
         print("\n[Phase 1] Starting Live Stream Consumer (Background)...")
         consumer_process = subprocess.Popen(consumer_cmd, shell=True)
-        print("Waiting 15 seconds for Spark to initialize...")
-        time.sleep(15)
+        print("Waiting 20 seconds for Spark to initialize...")
+        time.sleep(20)
         print("Consumer is listening.")
 
-        # Phase 2: Producer
         run_command_blocking(producer_cmd, "Phase 2: Kafka Producer")
 
-        # Phase 3 & 4 Wait Time (Adjusted for speed)
         wait_time = 15 if is_fast_mode else 30
         print(f"\nWaiting {wait_time} seconds for Consumer to finish writing to HDFS...")
         time.sleep(wait_time)
 
-        # Phase 3: Batch Aggregation
         run_command_blocking(batch_cmd, "Phase 3: Batch Aggregation")
 
-        # Phase 4: Neo4j Ingestion
         run_command_blocking(neo4j_cmd, "Phase 4: Neo4j Ingestion")
 
         print("\n==================================================")
@@ -62,7 +56,6 @@ def run_pipeline():
         print("\nPipeline forcefully interrupted by user.")
         
     finally:
-        # Phase 5: Clean up
         if consumer_process:
             print("\nCleaning up: Terminating the background Consumer process...")
             consumer_process.terminate()
