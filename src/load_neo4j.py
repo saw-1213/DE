@@ -24,7 +24,7 @@ class Neo4jBatchLoader:
 
     def load_student_dimensions(self):
         print("--- Loading Student Dimensions into Neo4j ---")
-        df = self.spark.read.csv(self.config['local_student_path'], header=True)
+        df = self.spark.read.csv(self.config['hdfs_student_path'], header=True)
         records = df.collect()
         
         with self.driver.session() as session:

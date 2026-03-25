@@ -63,15 +63,14 @@ class LibraryEventProducerFast:
         print("=== ALL RECORDS SENT SUCCESSFULLY! ===")
 
 def run_producer():
-    producer = LibraryEventProducer('config.json')
-    producer.send_events()
-
     if "--fast" in sys.argv:
         print("=== FAST MODE ===")
         producer = LibraryEventProducerFast('config.json')
     else:
         print("=== SIMULATION MODE ===")
         producer = LibraryEventProducer('config.json')
+
+    producer.send_events()
     
 if __name__ == "__main__":
     run_producer()

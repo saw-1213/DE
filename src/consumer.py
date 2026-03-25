@@ -10,6 +10,8 @@ class LibraryStreamProcessor:
         with open('config.json', 'r') as config_file:
             self.config = json.load(config_file)
 
+        self.setup_kafka_topics()
+
         self.spark = SparkSession.builder \
             .appName("LibraryLiveOccupancy") \
             .getOrCreate()
@@ -56,7 +58,7 @@ class LibraryStreamProcessor:
             .option("subscribe", self.config["topic_name"]) \
             .option("startingOffsets", "earliest") \
             .option("failOnDataLoss", "false") \
-            .option("maxOffsetsPerTrigger", 20) \
+            .option("maxOffsetsPerTrigger", 30) \
             .load()
 
     def write_raw(self, df):
@@ -65,7 +67,6 @@ class LibraryStreamProcessor:
             .format("text") \
             .option("path", self.config["HDFS_RAW_PATH"]) \
             .option("checkpointLocation", self.config["RAW_CHECKPOINT"]) \
-            .trigger(processingTime="5 seconds") \
             .start()
 
 
@@ -78,7 +79,6 @@ class LibraryStreamProcessor:
             .format("parquet") \
             .option("path", self.config["HDFS_CURATED_PATH"]) \
             .option("checkpointLocation", self.config["CURATED_CHECKPOINT"]) \
-            .trigger(processingTime="5 seconds") \
             .start()
 
         return hdfs_query

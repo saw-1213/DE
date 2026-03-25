@@ -12,7 +12,7 @@ def run_command_blocking(command, step_name):
         print(f"\nERROR: [{step_name}] failed. Stopping pipeline.")
         sys.exit(1)
     
-    print(f"✅ [{step_name}] Completed Successfully.")
+    print(f"[{step_name}] Completed Successfully.")
 
 def run_pipeline():
     is_fast_mode = "--fast" in sys.argv
@@ -24,14 +24,17 @@ def run_pipeline():
     print("Ensure HDFS, Zookeeper, and Kafka are already running!\n")
     time.sleep(3)
 
-    consumer_cmd = "spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 --driver-memory 1g --executor-memory 1g consumer.py"
+    student_cmd = "python upload_students.py"
+    consumer_cmd = "spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 consumer.py"
     producer_cmd = "python producer.py --fast" if is_fast_mode else "python producer.py"
-    batch_cmd = "spark-submit --driver-memory 1g batch_processing_all.py"
-    neo4j_cmd = "spark-submit load_neo4j_batch.py"
+    batch_cmd = "spark-submit batch_processing.py"
+    neo4j_cmd = "spark-submit load_neo4j.py"
 
     consumer_process = None
 
     try:
+        run_command_blocking(student_cmd, "Uploading static student file...")
+
         print("\n[Phase 1] Starting Live Stream Consumer (Background)...")
         consumer_process = subprocess.Popen(consumer_cmd, shell=True)
         print("Waiting 20 seconds for Spark to initialize...")
@@ -40,7 +43,7 @@ def run_pipeline():
 
         run_command_blocking(producer_cmd, "Phase 2: Kafka Producer")
 
-        wait_time = 15 if is_fast_mode else 30
+        wait_time = 60 if is_fast_mode else 30
         print(f"\nWaiting {wait_time} seconds for Consumer to finish writing to HDFS...")
         time.sleep(wait_time)
 
