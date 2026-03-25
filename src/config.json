@@ -6,7 +6,7 @@
     "topic_room_gate": "room_gate_events",
     "topic_name": "main_gate_events,room_gate_events",
     "input_file": "/home/student/library/dataset/library_events.json",
-    "sleep_interval": 0.5,
+    "sleep_interval": 0.7,
     "HDFS_RAW_PATH": "hdfs://localhost:9000/user/student/library/raw",
     "HDFS_CURATED_PATH": "hdfs://localhost:9000/user/student/library/curated",
     "RAW_CHECKPOINT": "hdfs://localhost:9000/user/student/library/checkpoints/raw",

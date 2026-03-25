@@ -30,7 +30,7 @@ class LibraryStreamProcessor:
             .option("subscribe", self.config["topic_name"]) \
             .option("startingOffsets", "earliest") \
             .option("failOnDataLoss", "false") \
-            .option("maxOffsetsPerTrigger", 25) \
+            .option("maxOffsetsPerTrigger", 20) \
             .load()
 
     def write_raw(self, df):
