@@ -1,4 +1,5 @@
 import json
+from config_manager import ConfigManager
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType
@@ -7,8 +8,8 @@ from kafka.errors import TopicAlreadyExistsError
 
 class LibraryStreamProcessor:
     def __init__(self):
-        with open('config.json', 'r') as config_file:
-            self.config = json.load(config_file)
+        config_mgr = ConfigManager('config.json')
+        self.config = config_mgr.get_config()
 
         self.setup_kafka_topics()
 

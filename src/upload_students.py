@@ -2,21 +2,7 @@ import subprocess
 import sys
 import os
 import json
-
-class ConfigManager:
-    def __init__(self, config_file):
-        with open(config_file, 'r') as file:
-            self.config = json.load(file)
-
-    def get_config(self):
-        return self.config
-    
-    def get_neo4j_config(self):
-        return {
-            'uri': self.config['neo4j_uri'],
-            'username': self.config['neo4j_username'],
-            'password': self.config['neo4j_password']
-        }
+from config_manager import ConfigManager
 
 class HDFSManager:
     def __init__(self, target_dir):
