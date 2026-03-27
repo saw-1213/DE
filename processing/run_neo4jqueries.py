@@ -194,7 +194,7 @@ def main():
 
     try:
         # Load configuration
-        config_mgr = ConfigManager('config.json')
+        config_mgr = ConfigManager('utils/config.json')
         neo4j_config = config_mgr.get_neo4j_config()
 
         # Connect to Neo4j

@@ -8,7 +8,7 @@ from kafka.errors import TopicAlreadyExistsError
 
 class LibraryStreamProcessor:
     def __init__(self):
-        config_mgr = ConfigManager('config.json')
+        config_mgr = ConfigManager('utils/config.json')
         self.config = config_mgr.get_config()
 
         self.setup_kafka_topics()

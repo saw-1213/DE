@@ -9,7 +9,7 @@ class LibraryEventProducer:
         self.fast_mode = fast_mode
         
         try:
-            config_manager = ConfigManager('config.json')
+            config_manager = ConfigManager('utils/config.json')
             config_data = config_manager.get_config()
             
             self.main_topic = config_data['topic_main_gate']

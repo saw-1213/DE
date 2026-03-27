@@ -136,7 +136,7 @@ class LibraryBatchProcessor:
         self.spark.stop()
 
 def run_batch_job():
-    config_mgr = ConfigManager('config.json')
+    config_mgr = ConfigManager('utils/config.json')
     app_settings = config_mgr.get_config()
     
     processor = LibraryBatchProcessor(app_settings)

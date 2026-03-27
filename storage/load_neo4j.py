@@ -106,5 +106,5 @@ class Neo4jBatchLoader:
             self.spark.stop()
 
 if __name__ == "__main__":
-    loader = Neo4jBatchLoader('config.json')
+    loader = Neo4jBatchLoader('utils/config.json')
     loader.execute_ingestion()

@@ -37,7 +37,7 @@ class HDFSManager:
         print("Student data successfully loaded into HDFS.")
 
 def execute_upload():
-    config_mgr = ConfigManager('config.json')
+    config_mgr = ConfigManager('utils/config.json')
     app_settings = config_mgr.get_config()
     hdfs_student_path = app_settings["hdfs_student_path"]
     local_student_path = app_settings["local_student_path"]

@@ -45,18 +45,23 @@ Your Team Reference/
     $ start-dfs.sh
     $ start-yarn.sh
     $ zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &
-    $ kafka-server-start/sh $KAFKA_HOME/config/server.properties &
+    $ kafka-server-start.sh $KAFKA_HOME/config/server.properties &
 
 3.2 Prepare the data:
     // Run the following as student:
+    $ source de-venv/bin/activate
+    $ mkdir /home/student/library
     $ cp -r <windows_path> /home/student/library/
     $ cd library
     $ python utils/data_generator.py
     $ python utils/upload_students.py
 
 3.4 Run the demo:
+    // Clear the storage in HDFS before demo if testing file remains
+    $ hdfs dfs -rm -r /user/student/library
+
     // Run the following as student:
-    $ python main.py
+    $ python main.py --fast
 
 // Delete later
 source /home/student/de-venv/bin/activate
