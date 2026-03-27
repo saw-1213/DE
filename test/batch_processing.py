@@ -4,8 +4,7 @@ import json
 from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql.functions import col, to_date, hour, count, \
-    lead, unix_timestamp, round, current_timestamp, when, sum as spark_sum, \
-    current_date, concat_ws
+    lead, unix_timestamp, round, current_timestamp, when, sum as spark_sum
 from utils.config_manager import ConfigManager
 
 class LibraryBatchProcessor:
@@ -18,7 +17,7 @@ class LibraryBatchProcessor:
 
     def load_curated_data(self):
         df = self.spark.read.parquet(self.config["HDFS_CURATED_PATH"])
-        df_with_date = df.withColumnRenamed("date", "record_date")
+        df_with_date = df.withColumn("record_date", to_date(col("timestamp")))
 
         return df_with_date
 
@@ -27,7 +26,7 @@ class LibraryBatchProcessor:
         
         valid_df = deduplicated_df.filter(
             col("student_id").isNotNull() & 
-            (col("record_date") <= current_date())
+            (col("timestamp") <= current_timestamp())
         )
         return valid_df
 
@@ -70,20 +69,18 @@ class LibraryBatchProcessor:
         return pax_df
     
     def generate_room_duration_report(self, df):
-        window_spec = Window.partitionBy("student_id", "location").orderBy("record_date", "time")
+        window_spec = Window.partitionBy("student_id", "location").orderBy("timestamp")
         
         room_events = df.filter(col("gate_type") == "ROOM_GATE")
         
-        paired_df = room_events.withColumn("exit_time", lead("time").over(window_spec)) \
-                               .withColumn("exit_date", lead("record_date").over(window_spec)) \
+        paired_df = room_events.withColumn("exit_timestamp", lead("timestamp").over(window_spec)) \
                                .withColumn("next_event", lead("event_type").over(window_spec))
         
         visits_df = paired_df.filter((col("event_type") == "ENTRY") & (col("next_event") == "EXIT"))
         
         duration_df = visits_df.withColumn(
             "occupied_minutes",
-            round((unix_timestamp(concat_ws(" ", col("exit_date"), col("exit_time"))) -
-                   unix_timestamp(concat_ws(" ", col("record_date"), col("time")))) / 60, 2)
+            round((unix_timestamp(col("exit_timestamp")) - unix_timestamp(col("timestamp"))) / 60, 2)
         )
         
         final_report = duration_df.select(

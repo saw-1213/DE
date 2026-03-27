@@ -1,7 +1,7 @@
 import json
 from utils.config_manager import ConfigManager
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, from_json
+from pyspark.sql.functions import col, from_json, to_date, date_format
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType
 from kafka.admin import KafkaAdminClient, NewTopic
 from kafka.errors import TopicAlreadyExistsError
@@ -75,8 +75,13 @@ class LibraryStreamProcessor:
         parsed_df = df.select(from_json(col("value").cast("string"), self.schema).alias("data")) \
             .select("data.*") \
             .filter(col("event_id").isNotNull())
+        
+        transformed_df = parsed_df \
+            .withColumn("date", to_date(col("timestamp"))) \
+            .withColumn("time", date_format(col("timestamp"), "HH:mm:ss")) \
+            .drop("timestamp")
 
-        hdfs_query = parsed_df.writeStream \
+        hdfs_query = transformed_df.writeStream \
             .format("parquet") \
             .option("path", self.config["HDFS_CURATED_PATH"]) \
             .option("checkpointLocation", self.config["CURATED_CHECKPOINT"]) \
