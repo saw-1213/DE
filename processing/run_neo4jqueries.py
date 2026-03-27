@@ -1,6 +1,6 @@
 import json
 from neo4j import GraphDatabase
-from config_manager import ConfigManager
+from utils.config_manager import ConfigManager
 
 def run_query_1(driver):
     print("=" * 150)

@@ -5,7 +5,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.window import Window
 from pyspark.sql.functions import col, to_date, hour, count, \
     lead, unix_timestamp, round, current_timestamp, when, sum as spark_sum
-from config_manager import ConfigManager
+from utils.config_manager import ConfigManager
 
 class LibraryBatchProcessor:
     def __init__(self, config):

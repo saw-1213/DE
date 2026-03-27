@@ -1,5 +1,5 @@
 import json
-from config_manager import ConfigManager
+from utils.config_manager import ConfigManager
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType

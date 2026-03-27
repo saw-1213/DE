@@ -99,10 +99,10 @@ def execute_data_generation():
     generator.generate_students()
     generator.generate_events()
     
-    generator.save_to_json(generator.students, "students_dataset.json")
-    generator.save_to_json(generator.events, "library_events.json")
-    generator.save_to_csv(generator.students, "students_dataset.csv")
-    generator.save_to_csv(generator.events, "library_events.csv")
+    generator.save_to_json(generator.students, "library/dataset/students_dataset.json")
+    generator.save_to_json(generator.events, "library/dataset/library_events.json")
+    generator.save_to_csv(generator.students, "library/dataset/students_dataset.csv")
+    generator.save_to_csv(generator.events, "library/dataset/library_events.csv")
 
 if __name__ == "__main__":
     execute_data_generation()

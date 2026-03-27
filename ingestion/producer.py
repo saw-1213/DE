@@ -2,7 +2,7 @@ import json
 import time
 from kafka import KafkaProducer
 import sys
-from config_manager import ConfigManager
+from utils.config_manager import ConfigManager
 
 class LibraryEventProducer:
     def __init__(self, fast_mode):
