@@ -17,7 +17,7 @@ class LibraryStreamProcessor:
             .appName("LibraryLiveOccupancy") \
             .getOrCreate()
 
-        self.spark.sparkContext.setLogLevel("WARN")
+        self.spark.sparkContext.setLogLevel("ERROR")
 
         self.schema = StructType([
             StructField("event_id", StringType(), True),
@@ -86,6 +86,8 @@ class LibraryStreamProcessor:
 
     def start_pipeline(self):
         raw_stream_df = self.read_stream()
+
+        raw_stream_df.printSchema()
 
         raw_query = self.write_raw(raw_stream_df)
         hdfs_query = self.write_curated(raw_stream_df)
