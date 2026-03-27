@@ -13,7 +13,7 @@ class LibraryBatchProcessor:
         self.spark = SparkSession.builder \
             .appName("LibraryBatchAnalytics") \
             .getOrCreate()
-        self.spark.sparkContext.setLogLevel("WARN")
+        self.spark.sparkContext.setLogLevel("ERROR")
 
     def load_curated_data(self):
         df = self.spark.read.parquet(self.config["HDFS_CURATED_PATH"])
