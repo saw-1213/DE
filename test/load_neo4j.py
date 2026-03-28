@@ -43,9 +43,7 @@ class Neo4jBatchLoader:
         formatted_records = []
         for r in records:
             d = r.asDict()
-            d['date'] = str(d['date']) if d.get('date') else None
-            d['time'] = str(d['time']) if d.get('time') else None
-            #d['timestamp'] = d['timestamp'].isoformat() if d['timestamp'] else None
+            d['timestamp'] = d['timestamp'].isoformat() if d['timestamp'] else None
             formatted_records.append(d)
 
         with self.driver.session() as session:
@@ -57,8 +55,7 @@ class Neo4jBatchLoader:
                 SET e.event_type = event.event_type,
                     e.gate_type = event.gate_type,
                     e.location = event.location,
-                    e.date = date(event.date),
-                    e.time = time(event.time)
+                    e.timestamp = datetime(event.timestamp)
 
                 MERGE (s)-[:PERFORMED]->(e)
 
@@ -81,9 +78,9 @@ class Neo4jBatchLoader:
         formatted_records = []
         for r in records:
             d = r.asDict()
-            d['record_date'] = str(d['record_date']) if d.get('record_date') else None
-            d['entry_time'] = str(d['entry_time']) if d.get('entry_time') else None
-            d['exit_time'] = str(d['exit_time']) if d.get('exit_time') else None
+            d['record_date'] = str(d['record_date'])
+            d['entry_time'] = d['entry_time'].isoformat() if d['entry_time'] else None
+            d['exit_time'] = d['exit_time'].isoformat() if d['exit_time'] else None
             formatted_records.append(d)
 
         with self.driver.session() as session:
@@ -93,8 +90,8 @@ class Neo4jBatchLoader:
                 MERGE (r:Room {location: session_data.room_id})
                 MERGE (s)-[study:STUDIED_IN {date: session_data.record_date}]->(r)
                 SET study.duration_minutes = session_data.occupied_minutes,
-                    study.entry_time = time(session_data.entry_time),
-                    study.exit_time = time(session_data.exit_time)
+                    study.entry_time = datetime(session_data.entry_time),
+                    study.exit_time = datetime(session_data.exit_time)
             """, records=formatted_records)
 
     def execute_ingestion(self):
