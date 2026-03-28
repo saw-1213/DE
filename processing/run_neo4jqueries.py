@@ -1,3 +1,5 @@
+# Author: Tee Min Jie
+
 import json
 from neo4j import GraphDatabase
 from utils.config_manager import ConfigManager

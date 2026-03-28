@@ -1,3 +1,5 @@
+# Author: Tee Min Jie
+
 import json
 from pyspark.sql import SparkSession
 from neo4j import GraphDatabase
