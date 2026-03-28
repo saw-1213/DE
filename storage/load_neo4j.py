@@ -45,7 +45,6 @@ class Neo4jBatchLoader:
             d = r.asDict()
             d['date'] = str(d['date']) if d.get('date') else None
             d['time'] = str(d['time']) if d.get('time') else None
-            #d['timestamp'] = d['timestamp'].isoformat() if d['timestamp'] else None
             formatted_records.append(d)
 
         with self.driver.session() as session:
