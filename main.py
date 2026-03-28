@@ -27,7 +27,7 @@ def run_pipeline():
     student_cmd = "python utils/upload_students.py"
     consumer_cmd = "PYTHONPATH=. spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 ingestion/consumer.py 2> logs.txt"
     producer_cmd = "PYTHONPATH=. python ingestion/producer.py --fast" if is_fast_mode else "PYTHONPATH=. python ingestion/producer.py"
-    batch_cmd = "PYTHONPATH=. spark-submit processing/batch_processing.py"
+    batch_cmd = "PYTHONPATH=. spark-submit processing/batch_processing.py 2> batch_logs.txt"
     neo4j_cmd = "PYTHONPATH=. spark-submit storage/load_neo4j.py"
 
     consumer_process = None

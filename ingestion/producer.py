@@ -31,17 +31,21 @@ class LibraryEventProducer:
             with open(self.data_file, 'r') as file:
                 events = json.load(file)
 
-            for event in events:
-                if event['gate_type'] == 'MAIN_GATE':
-                    self.producer.send(self.main_topic, event)
-                    print(f"Sent to {self.main_topic}: {event['event_id']}")
-                elif event['gate_type'] == 'ROOM_GATE':
-                    self.producer.send(self.room_topic, event)
-                    print(f"Sent to {self.room_topic}: {event['event_id']}")
-
-
-                if self.fast_mode == False:
+            if self.fast_mode == False:
+                for event in events:
+                    if event['gate_type'] == 'MAIN_GATE':
+                        self.producer.send(self.main_topic, event)
+                        print(f"Sent to {self.main_topic}: {event['event_id']}")
+                    elif event['gate_type'] == 'ROOM_GATE':
+                        self.producer.send(self.room_topic, event)
+                        print(f"Sent to {self.room_topic}: {event['event_id']}")
                     time.sleep(self.sleep_time)
+            else:
+                for event in events:
+                    if event['gate_type'] == 'MAIN_GATE':
+                        self.producer.send(self.main_topic, event)
+                    elif event['gate_type'] == 'ROOM_GATE':
+                        self.producer.send(self.room_topic, event)
             
         except Exception as e:
             print("Error sending events: " + str(e))

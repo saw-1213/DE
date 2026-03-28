@@ -57,8 +57,10 @@ Your Team Reference/
     $ python utils/upload_students.py
 
 3.4 Run the demo:
-    // Clear the storage in HDFS before demo if testing file remains
+    // Clear the storage in HDFS before demo if previous testing cache remains
     $ hdfs dfs -rm -r /user/student/library
+    $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic main_gate_events
+    $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic room_gate_events
 
     // Run the following as student:
     $ python main.py --fast
