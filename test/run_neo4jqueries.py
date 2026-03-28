@@ -50,17 +50,18 @@ def run_query_2(driver):
     with driver.session() as session:
         result = session.run("""
            MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
-                WHERE e.timestamp IS NOT NULL
+                WHERE e.date IS NOT NULL
+                AND e.time IS NOT NULL
                 AND e.event_type = 'ENTRY'
-                AND e.timestamp >= datetime() - duration({days: 30})
+                AND e.date >= date() - duration({days: 30})
                 OPTIONAL MATCH (s:Student {student_id: e.student_id})
                 WHERE s.major IS NOT NULL
                 AND s.year_of_study IS NOT NULL
-                WITH date(e.timestamp) as visit_date,
+                WITH e.date as visit_date,
                 CASE
-                        WHEN (e.timestamp + duration({hours: 8})).hour >= 6 AND (e.timestamp + duration({hours: 8})).hour <= 11 THEN 'Morning'
-                        WHEN (e.timestamp + duration({hours: 8})).hour >= 12 AND (e.timestamp + duration({hours: 8})).hour <= 16 THEN 'Afternoon'
-                        WHEN (e.timestamp + duration({hours: 8})).hour >= 17 AND (e.timestamp + duration({hours: 8})).hour <= 20 THEN 'Evening'
+                        WHEN e.time.hour >= 6 AND e.time.hour <= 11 THEN 'Morning'
+                        WHEN e.time.hour >= 12 AND e.time.hour <= 16 THEN 'Afternoon'
+                        WHEN e.time.hour >= 17 AND e.time.hour <= 20 THEN 'Evening'
                 ELSE 'Night'
                 END as time_period, e.student_id as student_id, s.major as major, s.year_of_study as year
                 
@@ -86,11 +87,11 @@ def run_query_2(driver):
                 CASE WHEN y.visits > best.visits THEN y ELSE best END) as top_year
                 
                 OPTIONAL MATCH (e2:Event)-[:AT_LIBRARY]->(l:Library)
-                WHERE date(e2.timestamp) = visit_date AND e2.event_type = 'ENTRY' AND e2.timestamp >= datetime() - duration({days: 30})
+                WHERE e2.date = visit_date AND e2.event_type = 'ENTRY' AND e2.date >= date() - duration({days: 30})
                  AND CASE
-                WHEN (e2.timestamp + duration({hours: 8})).hour >= 6 AND (e2.timestamp + duration({hours: 8})).hour <= 11 THEN 'Morning'
-                WHEN (e2.timestamp + duration({hours: 8})).hour >= 12 AND (e2.timestamp + duration({hours: 8})).hour <= 16 THEN 'Afternoon'
-                WHEN (e2.timestamp + duration({hours: 8})).hour >= 17 AND (e2.timestamp + duration({hours: 8})).hour <= 20 THEN 'Evening'
+                WHEN e2.time.hour >= 6 AND e2.time.hour <= 11 THEN 'Morning'
+                WHEN e2.time.hour >= 12 AND e2.time.hour <= 16 THEN 'Afternoon'
+                WHEN e2.time.hour >= 17 AND e2.time.hour <= 20 THEN 'Evening'
                 ELSE 'Night'
                 END = time_period
                 WITH visit_date, time_period,
@@ -121,10 +122,9 @@ def run_summary(driver):
         result = session.run("""
             MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
             WHERE e.event_type = 'ENTRY'
-            WITH e, date(e.timestamp + duration({hours: 8})) as local_date
             RETURN COUNT(*) as total_entries,
                    COUNT(DISTINCT e.student_id) as unique_students,
-                   COUNT(DISTINCT local_date) as unique_days
+                   COUNT(DISTINCT e.date) as unique_days
         """)
         for record in result:
             total = record['total_entries']
@@ -152,8 +152,8 @@ def run_peak_hours(driver):
     with driver.session() as session:
         result = session.run("""
             MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
-            WHERE e.event_type = 'ENTRY'
-            WITH (e.timestamp + duration({hours: 8})).hour as local_hour
+            WHERE e.event_type = 'ENTRY' AND e.time IS NOT NULL
+            WITH e.time.hour as local_hour
             RETURN local_hour,
                    CASE
                      WHEN local_hour = 0 THEN '12:00 AM'
