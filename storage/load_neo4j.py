@@ -24,22 +24,27 @@ class Neo4jBatchLoader:
 
     def load_student_dimensions(self):
         print("--- Loading Student Dimensions into Neo4j ---")
-        df = self.spark.read.csv(self.config['hdfs_student_path'], header=True)
+        local_path = self.config['local_student_path']
+        if not local_path.startswith('file://'):
+            local_path = f"file://{local_path}"
+        df = self.spark.read.csv(local_path, header=True)
         records = df.collect()
-        
+
         with self.driver.session() as session:
             session.run("""
                 UNWIND $records AS row
                 MERGE (s:Student {student_id: row.student_id})
                 SET s.major = row.major,
-                    s.year_of_study = toInteger(row.year_of_study)
+                    s.year_of_study = toInteger(row.year_of_study),
+                    s.study_level = row.study_level
             """, records=[r.asDict() for r in records])
+        print(f"✅ Loaded {len(records)} students")
 
     def load_curated_events(self):
         print("--- Loading Curated Streaming Events from HDFS ---")
         df = self.spark.read.parquet(self.config['HDFS_CURATED_PATH'])
         records = df.collect()
-        
+
         formatted_records = []
         for r in records:
             d = r.asDict()
@@ -71,30 +76,35 @@ class Neo4jBatchLoader:
                     MERGE (s)-[:ENTERED]->(r)
                 )
             """, records=formatted_records)
+        print(f"✅ Loaded {len(records)} events")
 
     def load_batch_durations(self):
         print("--- Loading Batch Room Durations from HDFS ---")
-        df = self.spark.read.parquet(self.config['HDFS_ROOM_DURATION_PATH'])
-        records = df.collect()
-        
-        formatted_records = []
-        for r in records:
-            d = r.asDict()
-            d['record_date'] = str(d['record_date']) if d.get('record_date') else None
-            d['entry_time'] = str(d['entry_time']) if d.get('entry_time') else None
-            d['exit_time'] = str(d['exit_time']) if d.get('exit_time') else None
-            formatted_records.append(d)
+        try:
+            df = self.spark.read.parquet(self.config['HDFS_ROOM_DURATION_PATH'])
+            records = df.collect()
 
-        with self.driver.session() as session:
-            session.run("""
-                UNWIND $records AS session_data
-                MERGE (s:Student {student_id: session_data.student_id})
-                MERGE (r:Room {location: session_data.room_id})
-                MERGE (s)-[study:STUDIED_IN {date: session_data.record_date}]->(r)
-                SET study.duration_minutes = session_data.occupied_minutes,
-                    study.entry_time = time(session_data.entry_time),
-                    study.exit_time = time(session_data.exit_time)
-            """, records=formatted_records)
+            formatted_records = []
+            for r in records:
+                d = r.asDict()
+                d['record_date'] = str(d['record_date']) if d.get('record_date') else None
+                d['entry_time'] = str(d['entry_time']) if d.get('entry_time') else None
+                d['exit_time'] = str(d['exit_time']) if d.get('exit_time') else None
+                formatted_records.append(d)
+
+            with self.driver.session() as session:
+                session.run("""
+                    UNWIND $records AS session_data
+                    MERGE (s:Student {student_id: session_data.student_id})
+                    MERGE (r:Room {location: session_data.room_id})
+                    MERGE (s)-[study:STUDIED_IN {date: session_data.record_date}]->(r)
+                    SET study.duration_minutes = session_data.occupied_minutes,
+                        study.entry_time = time(session_data.entry_time),
+                        study.exit_time = time(session_data.exit_time)
+                """, records=formatted_records)
+            print(f"✅ Loaded {len(records)} room durations")
+        except Exception as e:
+            print(f"⚠️ No batch durations found: {e}")
 
     def execute_ingestion(self):
         try:
