@@ -60,9 +60,12 @@ def run_pipeline():
         
     finally:
         if consumer_process:
-            print("\nCleaning up: Terminating the background Consumer process...")
-            consumer_process.terminate()
-            consumer_process.wait()
+            print("\nCleaning up: Triggering Consumer Kill Switch...")
+
+            with open("STOP_CONSUMER.txt", "w") as f:
+                f.write("stop")
+                
+            time.sleep(6) 
             print("Consumer safely shut down.")
 
 if __name__ == "__main__":
