@@ -57,19 +57,18 @@ Your Team Reference/
     $ python utils/upload_students.py
 
 3.4 Run the demo:
+    // Run the following as student:
+    $ python main.py --fast
+
+3.5 To run the modules independently:
+    $ python utils/upload_students.py
+    $ PYTHONPATH=. spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 ingestion/consumer.py 2> logs.txt
+    $ PYTHONPATH=. python ingestion/producer.py
+    $ PYTHONPATH=. spark-submit processing/batch_processing.py 2> batch_logs.txt
+    $ PYTHONPATH=. spark-submit storage/load_neo4j.py
+
+3.6 Debugging:
     // Clear the storage in HDFS before demo if previous testing cache remains
     $ hdfs dfs -rm -r /user/student/library
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic main_gate_events
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic room_gate_events
-
-    // Run the following as student:
-    $ python main.py --fast
-
-// Delete later
-source /home/student/de-venv/bin/activate
-python data_generator.py
-python upload_students.py
-python producer.py
-spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 consumer.py 2> logs.txt
-spark-submit batch_processing.py
-spark-submit load_neo4j.py
