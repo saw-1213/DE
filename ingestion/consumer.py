@@ -1,14 +1,16 @@
 import json
-from utils.config_manager import ConfigManager
+from config_manager import ConfigManager
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, to_date, date_format
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType
+from pyspark.sql.functions import col, from_json
 from kafka.admin import KafkaAdminClient, NewTopic
 from kafka.errors import TopicAlreadyExistsError
+from pathlib import Path
 
 class LibraryStreamProcessor:
     def __init__(self):
-        config_mgr = ConfigManager('utils/config.json')
+        config_mgr = ConfigManager('config.json')
         self.config = config_mgr.get_config()
 
         self.setup_kafka_topics()
@@ -59,23 +61,19 @@ class LibraryStreamProcessor:
             .option("subscribe", self.config["topic_name"]) \
             .option("startingOffsets", "earliest") \
             .option("failOnDataLoss", "false") \
+            .option("maxOffsetsPerTrigger", 30) \
             .load()
 
-    def write_raw(self, df):
-        raw_df = df.selectExpr("CAST(value AS STRING)")
-        return raw_df.writeStream \
+    def write_raw(self, good_df):
+        return good_df.selectExpr("raw_json AS value").writeStream \
             .format("text") \
             .option("path", self.config["HDFS_RAW_PATH"]) \
             .option("checkpointLocation", self.config["RAW_CHECKPOINT"]) \
             .start()
 
 
-    def write_curated(self, df):
-        parsed_df = df.select(from_json(col("value").cast("string"), self.schema).alias("data")) \
-            .select("data.*") \
-            .filter(col("event_id").isNotNull())
-        
-        transformed_df = parsed_df \
+    def write_curated(self, good_df):
+        transformed_df = good_df.select("parsed_data.*") \
             .withColumn("date", to_date(col("timestamp"))) \
             .withColumn("time", date_format(col("timestamp"), "HH:mm:ss")) \
             .drop("timestamp")
@@ -87,19 +85,60 @@ class LibraryStreamProcessor:
             .start()
 
         return hdfs_query
+    
+    def write_corrupted(self, bad_df):
+        return bad_df.selectExpr("raw_json AS corrupted_record").writeStream \
+            .format("json") \
+            .option("path", self.config["LOCAL_CORRUPTED_PATH"]) \
+            .option("checkpointLocation", self.config["LOCAL_CORRUPTED_CHECKPOINT"]) \
+            .start()
+    
+    def quality_check(self, df):
+        checked_stream = df \
+            .withColumn("raw_json", col("value").cast("string")) \
+            .withColumn("parsed_data", from_json(col("raw_json"), self.schema))
+        
+        bad_df = checked_stream.filter(
+            col("parsed_data").isNull() | col("parsed_data.event_id").isNull()
+        )
+
+        good_df = checked_stream.filter(
+            col("parsed_data").isNotNull() & col("parsed_data.event_id").isNotNull()
+        )
+
+        return good_df, bad_df
 
     def start_pipeline(self):
         raw_stream_df = self.read_stream()
 
         raw_stream_df.printSchema()
 
-        raw_query = self.write_raw(raw_stream_df)
-        hdfs_query = self.write_curated(raw_stream_df)
+        good_df, bad_df = self.quality_check(raw_stream_df)
+
+        bad_query = self.write_corrupted(bad_df)
+        raw_query = self.write_raw(good_df)
+        hdfs_query = self.write_curated(good_df)
 
         print("\n==================================")
         print("Pipeline started - writing to HDFS")
         print("==================================\n")
-        self.spark.streams.awaitAnyTermination()
+
+        while True:
+            # 1. Define the kill switch file path
+            kill_switch = Path("STOP_CONSUMER.txt")
+            
+            # 2. Check if the orchestrator created it
+            if kill_switch.exists():
+                print("\nKill switch detected! Shutting down streams gracefully...")
+                for stream in self.spark.streams.active:
+                    stream.stop()
+                    
+                # 3. Delete the file using pathlib (no os.remove needed!)
+                kill_switch.unlink() 
+                break
+            
+            # 4. Wait for 5 seconds, then loop back and check again
+            self.spark.streams.awaitAnyTermination(timeoutMs=5000)
 
 if __name__ == "__main__":
     processor = LibraryStreamProcessor()
