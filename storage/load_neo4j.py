@@ -31,13 +31,19 @@ class Neo4jBatchLoader:
         records = df.collect()
 
         with self.driver.session() as session:
-            session.run("""
-                UNWIND $records AS row
-                MERGE (s:Student {student_id: row.student_id})
-                SET s.major = row.major,
-                    s.year_of_study = toInteger(row.year_of_study),
-                    s.study_level = row.study_level
-            """, records=[r.asDict() for r in records])
+            for row in records:
+                d = row.asDict()
+                session.run("""
+                    MERGE (s:Student {student_id: $student_id})
+                    SET s.major = $major,
+                        s.year_of_study = $year_of_study,
+                        s.study_level = $study_level
+                """,
+                student_id=d['student_id'],
+                major=d['major'],
+                year_of_study=int(d['year_of_study']),
+                study_level=d['study_level']
+                )
         print(f"✅ Loaded {len(records)} students")
 
     def load_curated_events(self):
@@ -45,38 +51,59 @@ class Neo4jBatchLoader:
         df = self.spark.read.parquet(self.config['HDFS_CURATED_PATH'])
         records = df.collect()
 
-        formatted_records = []
-        for r in records:
-            d = r.asDict()
-            d['date'] = str(d['date']) if d.get('date') else None
-            d['time'] = str(d['time']) if d.get('time') else None
-            formatted_records.append(d)
+        print(f"Found {len(records)} records in HDFS")
+
+        # Prepare batch data
+        batch_data = []
+        for row in records:
+            d = row.asDict()
+            batch_data.append({
+                'event_id': d['event_id'],
+                'student_id': d['student_id'],
+                'event_type': d['event_type'],
+                'gate_type': d['gate_type'],
+                'location': d['location'],
+                'date': str(d['date']),
+                'time': str(d['time'])
+            })
+
+        # Load in batches
+        batch_size = 5000
+        total_loaded = 0
 
         with self.driver.session() as session:
-            session.run("""
-                UNWIND $records AS event
-                MERGE (l:Library {name: 'Main Library'})
-                MERGE (s:Student {student_id: event.student_id})
-                MERGE (e:Event {event_id: event.event_id})
-                SET e.event_type = event.event_type,
-                    e.gate_type = event.gate_type,
-                    e.location = event.location,
-                    e.date = date(event.date),
-                    e.time = time(event.time)
+            for i in range(0, len(batch_data), batch_size):
+                batch = batch_data[i:i+batch_size]
 
-                MERGE (s)-[:PERFORMED]->(e)
+                session.run("""
+                    UNWIND $batch AS event
+                    MERGE (e:Event {event_id: event.event_id})
+                    SET e.event_type = event.event_type,
+                        e.gate_type = event.gate_type,
+                        e.location = event.location,
+                        e.date = date(event.date),
+                        e.time = time(event.time),
+                        e.student_id = event.student_id
+                    MERGE (s:Student {student_id: event.student_id})
+                    MERGE (s)-[:PERFORMED]->(e)
 
-                FOREACH (ignore IN CASE WHEN event.gate_type = 'MAIN_GATE' THEN [1] ELSE [] END |
-                    MERGE (e)-[:AT_LIBRARY]->(l)
-                )
+                    FOREACH (ignore IN CASE WHEN event.gate_type = 'MAIN_GATE' THEN [1] ELSE [] END |
+                        MERGE (l:Library {name: 'Main Library'})
+                        MERGE (e)-[:AT_LIBRARY]->(l)
+                        MERGE (s)-[:VISITED]->(l)
+                    )
 
-                FOREACH (ignore IN CASE WHEN event.gate_type = 'ROOM_GATE' THEN [1] ELSE [] END |
-                    MERGE (r:Room {location: event.location})
-                    MERGE (e)-[:IN_ROOM]->(r)
-                    MERGE (s)-[:ENTERED]->(r)
-                )
-            """, records=formatted_records)
-        print(f"✅ Loaded {len(records)} events")
+                    FOREACH (ignore IN CASE WHEN event.gate_type = 'ROOM_GATE' THEN [1] ELSE [] END |
+                        MERGE (r:Room {location: event.location})
+                        MERGE (e)-[:IN_ROOM]->(r)
+                        MERGE (s)-[:ENTERED]->(r)
+                    )
+                """, batch=batch)
+
+                total_loaded += len(batch)
+                print(f"Loaded {total_loaded} events...")
+
+        print(f"✅ Loaded {total_loaded} events")
 
     def load_batch_durations(self):
         print("--- Loading Batch Room Durations from HDFS ---")
@@ -84,25 +111,36 @@ class Neo4jBatchLoader:
             df = self.spark.read.parquet(self.config['HDFS_ROOM_DURATION_PATH'])
             records = df.collect()
 
-            formatted_records = []
-            for r in records:
-                d = r.asDict()
-                d['record_date'] = str(d['record_date']) if d.get('record_date') else None
-                d['entry_time'] = str(d['entry_time']) if d.get('entry_time') else None
-                d['exit_time'] = str(d['exit_time']) if d.get('exit_time') else None
-                formatted_records.append(d)
+            batch_data = []
+            for row in records:
+                d = row.asDict()
+                batch_data.append({
+                    'student_id': d['student_id'],
+                    'room_id': d['room_id'],
+                    'record_date': str(d['record_date']),
+                    'occupied_minutes': float(d['occupied_minutes']),
+                    'entry_time': str(d['entry_time']),
+                    'exit_time': str(d['exit_time'])
+                })
+
+            batch_size = 1000
+            total_loaded = 0
 
             with self.driver.session() as session:
-                session.run("""
-                    UNWIND $records AS session_data
-                    MERGE (s:Student {student_id: session_data.student_id})
-                    MERGE (r:Room {location: session_data.room_id})
-                    MERGE (s)-[study:STUDIED_IN {date: session_data.record_date}]->(r)
-                    SET study.duration_minutes = session_data.occupied_minutes,
-                        study.entry_time = time(session_data.entry_time),
-                        study.exit_time = time(session_data.exit_time)
-                """, records=formatted_records)
-            print(f"✅ Loaded {len(records)} room durations")
+                for i in range(0, len(batch_data), batch_size):
+                    batch = batch_data[i:i+batch_size]
+                    session.run("""
+                        UNWIND $batch AS session_data
+                        MERGE (s:Student {student_id: session_data.student_id})
+                        MERGE (r:Room {location: session_data.room_id})
+                        MERGE (s)-[study:STUDIED_IN {date: session_data.record_date}]->(r)
+                        SET study.duration_minutes = session_data.occupied_minutes,
+                            study.entry_time = time(session_data.entry_time),
+                            study.exit_time = time(session_data.exit_time)
+                    """, batch=batch)
+                    total_loaded += len(batch)
+                    print(f"Loaded {total_loaded} room durations...")
+            print(f"✅ Loaded {total_loaded} room durations")
         except Exception as e:
             print(f"⚠️ No batch durations found: {e}")
 

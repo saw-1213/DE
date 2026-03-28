@@ -35,7 +35,14 @@ def run_query_1(driver):
 
         print(f"{'Major':<30} {'Year':<6} {'1st Room':<12} {'Visits':<8} {'2nd Room':<12} {'Visits':<8} {'3rd Room':<12} {'Visits':<8} {'4th Room':<12} {'Visits':<8} {'5th Room':<12} {'Visits':<8}")
         print("-" * 150)
-        for record in result:
+
+        # Check if there are results
+        records = list(result)
+        if not records:
+            print("No data found for Query 1")
+            return
+
+        for record in records:
             print(f"{record['major']:<30} {record['year']:<6} "
                   f"{record['top_room_1']:<12} {record['visits_1']:<8} "
                   f"{record['top_room_2']:<12} {record['visits_2']:<8} "
@@ -44,92 +51,99 @@ def run_query_1(driver):
                   f"{record['top_room_5']:<12} {record['visits_5']:<8}")
 
 def run_query_2(driver):
-    print("\n" + "=" * 150)
-    print("QUERY 2: Daily Library Visits by Time Period with Top Most Visited Major and Year")
-    print("=" * 150)
+    print("\n" + "=" * 80)
+    print("QUERY 2: Daily Library Visits by Time Period")
+    print("=" * 80)
     with driver.session() as session:
-        result = session.run("""
-           MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
-                WHERE e.timestamp IS NOT NULL
-                AND e.event_type = 'ENTRY'
-                AND e.timestamp >= datetime() - duration({days: 30})
-                OPTIONAL MATCH (s:Student {student_id: e.student_id})
-                WHERE s.major IS NOT NULL
-                AND s.year_of_study IS NOT NULL
-                WITH date(e.timestamp) as visit_date,
-                CASE
-                        WHEN (e.timestamp + duration({hours: 8})).hour >= 6 AND (e.timestamp + duration({hours: 8})).hour <= 11 THEN 'Morning'
-                        WHEN (e.timestamp + duration({hours: 8})).hour >= 12 AND (e.timestamp + duration({hours: 8})).hour <= 16 THEN 'Afternoon'
-                        WHEN (e.timestamp + duration({hours: 8})).hour >= 17 AND (e.timestamp + duration({hours: 8})).hour <= 20 THEN 'Evening'
-                ELSE 'Night'
-                END as time_period, e.student_id as student_id, s.major as major, s.year_of_study as year
-                
-                WITH visit_date, time_period, major, year,
-                        COUNT(*) as year_major_visits,
-                        COUNT(DISTINCT student_id) as unique_students_in_group
+        # First check if there are entries
+        check_result = session.run("""
+            MATCH (e:Event)
+            WHERE e.event_type = 'ENTRY'
+              AND e.gate_type = 'MAIN_GATE'
+            RETURN COUNT(*) as total_entries
+        """)
+        total_check = check_result.single()['total_entries']
 
-                WITH visit_date, time_period, major,
-                        COLLECT({year: year, visits: year_major_visits}) as year_counts,
-                        SUM(year_major_visits) as total_major_visits
-                
-                WITH visit_date, time_period,
-                        COLLECT({major: major, total_visits: total_major_visits, year_counts: year_counts}) as majors
-                WITH visit_date, time_period,
-                        REDUCE(best = HEAD(majors), m in TAIL(majors) |
-                CASE WHEN m.total_visits > best.total_visits THEN m ELSE best END) as top_major
-                WITH visit_date, time_period,
-                        top_major.major as most_visited_major,
-                        top_major.year_counts as year_counts
-                
-                WITH visit_date, time_period, most_visited_major,
-                REDUCE(best = HEAD(year_counts), y in TAIL(year_counts) |
-                CASE WHEN y.visits > best.visits THEN y ELSE best END) as top_year
-                
-                OPTIONAL MATCH (e2:Event)-[:AT_LIBRARY]->(l:Library)
-                WHERE date(e2.timestamp) = visit_date AND e2.event_type = 'ENTRY' AND e2.timestamp >= datetime() - duration({days: 30})
-                 AND CASE
-                WHEN (e2.timestamp + duration({hours: 8})).hour >= 6 AND (e2.timestamp + duration({hours: 8})).hour <= 11 THEN 'Morning'
-                WHEN (e2.timestamp + duration({hours: 8})).hour >= 12 AND (e2.timestamp + duration({hours: 8})).hour <= 16 THEN 'Afternoon'
-                WHEN (e2.timestamp + duration({hours: 8})).hour >= 17 AND (e2.timestamp + duration({hours: 8})).hour <= 20 THEN 'Evening'
-                ELSE 'Night'
-                END = time_period
-                WITH visit_date, time_period,
-                COUNT(DISTINCT e2.student_id) as unique_students,
-                COUNT(*) as visits, most_visited_major, top_year.year as most_visited_major_study_year
-                RETURN toString(visit_date) as visit_date, time_period, visits, unique_students, most_visited_major, most_visited_major_study_year
-                ORDER BY visit_date DESC,
-                CASE time_period
-                WHEN 'Morning' THEN 1
-                WHEN 'Afternoon' THEN 2
-                WHEN 'Evening' THEN 3
-                WHEN 'Night' THEN 4
-                END
+        if total_check == 0:
+            print("No entry data found for Query 2")
+            return
+
+        result = session.run("""
+MATCH (e:Event)
+WHERE e.event_type = 'ENTRY'
+  AND e.gate_type = 'MAIN_GATE'
+
+WITH e.date as visit_date,
+     CASE
+        WHEN e.time.hour >= 6 AND e.time.hour <= 11 THEN 'Morning'
+        WHEN e.time.hour >= 12 AND e.time.hour <= 16 THEN 'Afternoon'
+        WHEN e.time.hour >= 17 AND e.time.hour <= 20 THEN 'Evening'
+        ELSE 'Night'
+     END as time_period,
+     e.student_id as student_id
+
+RETURN toString(visit_date) as visit_date,
+       time_period,
+       COUNT(*) as total_visits,
+       COUNT(DISTINCT student_id) as unique_students
+ORDER BY visit_date DESC,
+         CASE time_period
+            WHEN 'Morning' THEN 1
+            WHEN 'Afternoon' THEN 2
+            WHEN 'Evening' THEN 3
+            WHEN 'Night' THEN 4
+         END
         """)
 
-        print(f"{'Date':<15} {'Time Period':<20} {'Visits':<15} {'Unique Students':<18} {'Top Most Visited Major':<30} {'Top Most Visited Major Study Year':<25}")
-        print("-" * 150)
+        print(f"{'Date':<15} {'Time Period':<20} {'Visits':<15} {'Unique Students':<18}")
+        print("-" * 80)
+
+        record_count = 0
         for record in result:
+            record_count += 1
             print(f"{record['visit_date']:<15} {record['time_period']:<20} "
-                  f"{record['visits']:<15} {record['unique_students']:<18} "
-                  f"{record['most_visited_major']:<30} {record['most_visited_major_study_year']:<25}")
+                  f"{record['total_visits']:<15} {record['unique_students']:<18}")
+
+        if record_count == 0:
+            print("No data found for Query 2")
 
 def run_summary(driver):
     print("\n" + "=" * 70)
     print("SUMMARY STATISTICS")
     print("=" * 70)
     with driver.session() as session:
-        result = session.run("""
-            MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
+        # Check if there are entries first
+        check_result = session.run("""
+            MATCH (e:Event)
             WHERE e.event_type = 'ENTRY'
-            WITH e, date(e.timestamp + duration({hours: 8})) as local_date
+              AND e.gate_type = 'MAIN_GATE'
+            RETURN COUNT(*) as total_entries
+        """)
+        total_check = check_result.single()['total_entries']
+
+        if total_check == 0:
+            print("No entry data found for summary statistics")
+            return
+
+        result = session.run("""
+            MATCH (e:Event)
+            WHERE e.event_type = 'ENTRY'
+              AND e.gate_type = 'MAIN_GATE'
             RETURN COUNT(*) as total_entries,
                    COUNT(DISTINCT e.student_id) as unique_students,
-                   COUNT(DISTINCT local_date) as unique_days
+                   COUNT(DISTINCT e.date) as unique_days
         """)
+
         for record in result:
             total = record['total_entries']
             students = record['unique_students']
             days = record['unique_days']
+
+            # Avoid division by zero
+            if students == 0 or days == 0:
+                print("Insufficient data for summary statistics")
+                return
+
             visits_per_student = total / students
             visits_per_day = total / days
             visits_per_student_per_day = visits_per_student / days
@@ -137,7 +151,7 @@ def run_summary(driver):
             print(f"Total Library Entries: {total}")
             print(f"Unique Students: {students}")
             print(f"Unique Days: {days}")
-            print(f"\nAverages:")
+            print(f"\n📊 Averages:")
             print(f"  • Average Visits per Student (total over {days} days): {visits_per_student:.1f}")
             print(f"  • Average Daily Visits: {visits_per_day:.1f}")
             print(f"  • Average Visits per Student per Day: {visits_per_student_per_day:.2f} visits/day")
@@ -150,10 +164,24 @@ def run_peak_hours(driver):
     print("PEAK HOURS ANALYSIS")
     print("=" * 70)
     with driver.session() as session:
-        result = session.run("""
-            MATCH (e:Event)-[:AT_LIBRARY]->(l:Library)
+        # First check if there are entries
+        check_result = session.run("""
+            MATCH (e:Event)
             WHERE e.event_type = 'ENTRY'
-            WITH (e.timestamp + duration({hours: 8})).hour as local_hour
+              AND e.gate_type = 'MAIN_GATE'
+            RETURN COUNT(*) as total_entries
+        """)
+        total_check = check_result.single()['total_entries']
+
+        if total_check == 0:
+            print("No entry data found for peak hours analysis")
+            return
+
+        result = session.run("""
+            MATCH (e:Event)
+            WHERE e.event_type = 'ENTRY'
+              AND e.gate_type = 'MAIN_GATE'
+            WITH e.time.hour as local_hour
             RETURN local_hour,
                    CASE
                      WHEN local_hour = 0 THEN '12:00 AM'
@@ -165,8 +193,14 @@ def run_peak_hours(driver):
             ORDER BY visits DESC
             LIMIT 5
         """)
-        print("Top 5 Peak Hours (Local Time):")
-        for record in result:
+
+        records = list(result)
+        if not records:
+            print("No data found for peak hours analysis")
+            return
+
+        print("Top 5 Peak Hours:")
+        for record in records:
             print(f"  {record['time']} ({record['local_hour']}:00) - {record['visits']} visits")
 
 def run_most_popular_rooms(driver):
@@ -174,6 +208,19 @@ def run_most_popular_rooms(driver):
     print("MOST POPULAR ROOMS (Overall)")
     print("=" * 70)
     with driver.session() as session:
+        # First check if there are room entries
+        check_result = session.run("""
+            MATCH (e:Event)-[:IN_ROOM]->(r:Room)
+            WHERE e.event_type = 'ENTRY'
+              AND r.location <> 'MAIN_HALL'
+            RETURN COUNT(*) as total_visits
+        """)
+        total_check = check_result.single()['total_visits']
+
+        if total_check == 0:
+            print("No room visit data found")
+            return
+
         result = session.run("""
             MATCH (e:Event)-[:IN_ROOM]->(r:Room)
             WHERE e.event_type = 'ENTRY'
@@ -183,8 +230,14 @@ def run_most_popular_rooms(driver):
             ORDER BY visits DESC
             LIMIT 5
         """)
+
+        records = list(result)
+        if not records:
+            print("No room visit data found")
+            return
+
         print("Top 5 Most Popular Rooms:")
-        for record in result:
+        for record in records:
             print(f"  Room {record['room']}: {record['visits']} visits")
 
 def main():
@@ -202,7 +255,7 @@ def main():
             neo4j_config['uri'],
             auth=(neo4j_config['username'], neo4j_config['password'])
         )
-        
+
         driver.verify_connectivity()
         print("Successfully connected to Neo4j\n")
 
