@@ -3,9 +3,9 @@ from neo4j import GraphDatabase
 from utils.config_manager import ConfigManager
 
 def run_query_1(driver):
-    print("=" * 150)
-    print("QUERY 1: Top 5 Popular Rooms by Major and Year")
-    print("=" * 150)
+    print("=" * 105)
+    print("QUERY 1: Top 3 Popular Rooms by Major and Year")
+    print("=" * 105)
     with driver.session() as session:
         result = session.run("""
             MATCH (s:Student)-[:ENTERED]->(r:Room)
@@ -25,16 +25,12 @@ def run_query_1(driver):
                    rooms[1].room as top_room_2,
                    rooms[1].visits as visits_2,
                    rooms[2].room as top_room_3,
-                   rooms[2].visits as visits_3,
-                   rooms[3].room as top_room_4,
-                   rooms[3].visits as visits_4,
-                   rooms[4].room as top_room_5,
-                   rooms[4].visits as visits_5
+                   rooms[2].visits as visits_3
             ORDER BY major, year ASC
         """)
 
-        print(f"{'Major':<30} {'Year':<6} {'1st Room':<12} {'Visits':<8} {'2nd Room':<12} {'Visits':<8} {'3rd Room':<12} {'Visits':<8} {'4th Room':<12} {'Visits':<8} {'5th Room':<12} {'Visits':<8}")
-        print("-" * 150)
+        print(f"{'Major':<30} {'Year':<6} {'1st Room':<12} {'Visits':<8} {'2nd Room':<12} {'Visits':<8} {'3rd Room':<12} {'Visits':<8}")
+        print("-" * 105)
 
         # Check if there are results
         records = list(result)
@@ -46,9 +42,7 @@ def run_query_1(driver):
             print(f"{record['major']:<30} {record['year']:<6} "
                   f"{record['top_room_1']:<12} {record['visits_1']:<8} "
                   f"{record['top_room_2']:<12} {record['visits_2']:<8} "
-                  f"{record['top_room_3']:<12} {record['visits_3']:<8} "
-                  f"{record['top_room_4']:<12} {record['visits_4']:<8} "
-                  f"{record['top_room_5']:<12} {record['visits_5']:<8}")
+                  f"{record['top_room_3']:<12} {record['visits_3']:<8}")
 
 def run_query_2(driver):
     print("\n" + "=" * 80)
