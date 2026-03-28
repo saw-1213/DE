@@ -19,5 +19,6 @@
     "HDFS_ROOM_DURATION_PATH": "hdfs://localhost:9000/user/student/library/reports/room_duration",
     "neo4j_uri": "neo4j+s://7245d5b4.databases.neo4j.io",
     "neo4j_username": "7245d5b4",
-    "neo4j_password": "HHH-M3WJbojBqY0jNsswMFj1FjODPiN7qZyZKkWccIg"
+    "neo4j_password": "HHH-M3WJbojBqY0jNsswMFj1FjODPiN7qZyZKkWccIg",
+    "mongodb_uri": "mongodb+srv://yapws:o50329-123@cluster0.t669re5.mongodb.net/?appName=Cluster0"
 }
