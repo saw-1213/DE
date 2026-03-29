@@ -1,3 +1,5 @@
+# Author: Nga Zhi Ier
+
 import json
 from config_manager import ConfigManager
 from pyspark.sql import SparkSession
