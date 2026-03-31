@@ -19,6 +19,7 @@ class LibraryStreamProcessor:
 
         self.spark = SparkSession.builder \
             .appName("LibraryLiveOccupancy") \
+            .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1") \
             .getOrCreate()
 
         self.spark.sparkContext.setLogLevel("ERROR")

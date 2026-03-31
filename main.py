@@ -25,13 +25,9 @@ def run_pipeline():
     time.sleep(3)
 
     student_cmd = "python utils/upload_students.py"
-    consumer_cmd = "PYTHONPATH=. spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 ingestion/consumer.py 2> logs.txt"
+    consumer_cmd = "PYTHONPATH=. python ingestion/consumer.py 2> logs.txt"
     producer_cmd = "PYTHONPATH=. python ingestion/producer.py --fast" if is_fast_mode else "PYTHONPATH=. python ingestion/producer.py"
-    batch_cmd = "PYTHONPATH=. spark-submit processing/batch_processing.py 2> batch_logs.txt"
-    neo4j_cmd = "PYTHONPATH=. spark-submit storage/load_neo4j.py"
-    mongodb_cmd = "PYTHONPATH=. spark-submit storage/load_mongodb.py"
-    neo4j_query_cmd = "PYTHONPATH=. python run_neo4j_queries.py"
-    mongodb_query_cmd = "PYTHONPATH=. python run_mongodb_queries.py"
+    batch_cmd = "PYTHONPATH=. python processing/batch_processing.py 2> batch_logs.txt"
 
     consumer_process = None
 
@@ -51,17 +47,6 @@ def run_pipeline():
         time.sleep(wait_time)
 
         run_command_blocking(batch_cmd, "Phase 3: Batch Aggregation")
-
-        run_command_blocking(neo4j_cmd, "Phase 4: Neo4j Ingestion")
-
-        run_command_blocking(mongodb_cmd, "Phase 5: MongoDB Ingestion")
-
-        print("\n==================================================")
-        print("             STARTING ANALYTICS REPORTS          ")
-        print("==================================================")
-
-        run_command_blocking(neo4j_query_cmd, "Phase 6: Neo4j Graph Analytics")
-        run_command_blocking(mongodb_query_cmd, "Phase 7: MongoDB Document Analytics")
 
         print("\n==================================================")
         print("             FULL PIPELINE RUN COMPLETE          ")

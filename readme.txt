@@ -1,5 +1,5 @@
 Team Reference: G5-2
-Submission Date: Date
+Submission Date: 2/4/2026
 
 -----------------------------------------------------------
 1. Project Title:
@@ -21,11 +21,12 @@ Your Team Reference/
 │
 ├── processing/             
 │   ├── batch_processing.py 
-│   └── run_neo4jqueries.py 
+│   ├── run_neo4j_queries.py
+│   └── run_mongodb_queries.py 
 │
 ├── storage/
 │   ├── load_neo4j.py             
-│   └── etc.py  
+│   └── load_mongodb.py  
 │
 └── utils/
     ├── data_generator.py
@@ -47,7 +48,7 @@ Your Team Reference/
     $ zookeeper-server-start.sh $KAFKA_HOME/config/zookeeper.properties &
     $ kafka-server-start.sh $KAFKA_HOME/config/server.properties &
 
-3.2 Prepare the data:
+3.3 Prepare the data:
     // Run the following as student:
     $ source de-venv/bin/activate
     $ mkdir /home/student/library
@@ -62,10 +63,13 @@ Your Team Reference/
 
 3.5 To run the modules independently:
     $ python utils/upload_students.py
-    $ PYTHONPATH=. spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1 ingestion/consumer.py 2> logs.txt
+    $ PYTHONPATH=. python ingestion/consumer.py 2> logs.txt
     $ PYTHONPATH=. python ingestion/producer.py
-    $ PYTHONPATH=. spark-submit processing/batch_processing.py 2> batch_logs.txt
-    $ PYTHONPATH=. spark-submit storage/load_neo4j.py
+    $ PYTHONPATH=. python processing/batch_processing.py 2> batch_logs.txt
+    $ PYTHONPATH=. python storage/load_neo4j.py
+    $ PYTHONPATH=. python storage/load_mongodb.py
+    $ PYTHONPATH=. python processing/run_neo4j_queries.py
+    $ PYTHONPATH=. python processing/run_mongodb_queries.py
 
 3.6 Debugging:
     // Clear the storage in HDFS before demo if previous testing cache remains
