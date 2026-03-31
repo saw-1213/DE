@@ -101,7 +101,7 @@ class MongoQueries:
 
 
 if __name__ == "__main__":
-    mq = MongoQueries("config.json")
+    mq = MongoQueries("utils/config.json")
     mq.run()
 
 

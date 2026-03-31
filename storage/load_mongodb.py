@@ -66,5 +66,5 @@ class MongoLoader:
 
 
 if __name__ == "__main__":
-    loader = MongoLoader("config.json")
+    loader = MongoLoader("utils/config.json")
     loader.run()
