@@ -76,3 +76,6 @@ Your Team Reference/
     $ hdfs dfs -rm -r /user/student/library
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic main_gate_events
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic room_gate_events
+
+    // Remove the STOP_CONSUMER.txt to after every run
+    $ rm STOP_CONSUMER.txt

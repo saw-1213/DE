@@ -1,7 +1,7 @@
 # Author: Nga Zhi Ier
 
 import json
-from config_manager import ConfigManager
+from utils.config_manager import ConfigManager
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, to_date, date_format
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType
@@ -12,7 +12,7 @@ from pathlib import Path
 
 class LibraryStreamProcessor:
     def __init__(self):
-        config_mgr = ConfigManager('config.json')
+        config_mgr = ConfigManager('utils/config.json')
         self.config = config_mgr.get_config()
 
         self.setup_kafka_topics()
@@ -128,7 +128,7 @@ class LibraryStreamProcessor:
 
         while True:
             # 1. Define the kill switch file path
-            kill_switch = Path("STOP_CONSUMER.txt")
+            kill_switch = Path("/home/student/library/STOP_CONSUMER.txt")
             
             # 2. Check if the orchestrator created it
             if kill_switch.exists():
@@ -141,7 +141,7 @@ class LibraryStreamProcessor:
                 break
             
             # 4. Wait for 5 seconds, then loop back and check again
-            self.spark.streams.awaitAnyTermination(timeoutMs=5000)
+            self.spark.streams.awaitAnyTermination(timeout=5)
 
 if __name__ == "__main__":
     processor = LibraryStreamProcessor()
