@@ -85,7 +85,7 @@ Your Team Reference/
     // Clear the storage in HDFS before demo if previous testing cache remains
     $ hdfs dfs -rm -r /user/student/library
 
-    // Remove STOP_CONSUMER.txt that stops the consumer after every demo
+    // Remove STOP_CONSUMER.txt that stops the consumer if it exists
     $ rm /home/student/library/STOP_CONSUMER.txt
 
     // Clear the kafka topics if it fails to terminate itself
