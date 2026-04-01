@@ -55,7 +55,7 @@ class MongoQueries:
             print(f"{major:<30} {round(avg, 2):>10}")
 
     def query_2(self):
-        print("\nQuery 2: Top 3 Students With Most Entries in a Day")
+        print("\nQuery 2: Top 5 Students With Most Entries in a Day")
 
         student_map = {}
         for s in self.students.find():
@@ -66,16 +66,16 @@ class MongoQueries:
             key = (e["student_id"], e["date"])
             entry_count[key] += 1
 
-        top_3 = sorted(entry_count.items(), key=lambda x: x[1], reverse=True)[:3]
+        top_5 = sorted(entry_count.items(), key=lambda x: x[1], reverse=True)[:5]
 
-        if not top_3:
+        if not top_5:
             print("No data found.")
             return
 
         print(f"\n{'Student ID':<12} {'Major':<25} {'Date':<12} {'Entries':>7}")
         print("-" * 60)
 
-        for (student_id, date), entries in top_3:
+        for (student_id, date), entries in top_5:
             major = student_map.get(student_id, "N/A")
             print(f"{student_id:<12} {major:<25} {date:<12} {entries:>7}")
 
