@@ -25,9 +25,9 @@ def run_pipeline():
     time.sleep(3)
 
     student_cmd = "python utils/upload_students.py"
-    consumer_cmd = "PYTHONPATH=. python ingestion/consumer.py 2> logs.txt"
-    producer_cmd = "PYTHONPATH=. python ingestion/producer.py --fast" if is_fast_mode else "PYTHONPATH=. python ingestion/producer.py"
-    batch_cmd = "PYTHONPATH=. python processing/batch_processing.py 2> batch_logs.txt"
+    consumer_cmd = "python -m ingestion.consumer 2> logs.txt"
+    producer_cmd = "python -m ingestion.producer --fast" if is_fast_mode else "python -m ingestion.producer"
+    batch_cmd = "python -m processing.batch_processing 2> batch_logs.txt"
 
     consumer_process = None
 

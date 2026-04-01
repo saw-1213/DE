@@ -62,7 +62,21 @@ Your Team Reference/
     $ python main.py --fast
 
 3.5 To run the modules independently:
+    // Make sure we are currently in the library directory, 
+    // and upload the students dataset
+    $ cd home/student/library
     $ python utils/upload_students.py
+
+    // Method 1: Run as Pythonic Module
+    $ python -m ingestion.consumer 2> logs.txt
+    $ python -m ingestion.producer
+    $ python -m processing.batch_processing 2> batch_logs.txt
+    $ python -m storage.load_neo4j
+    $ python -m storage.load_mongodb
+    $ python -m processing.run_neo4j_queries
+    $ python -m processing.run_mongodb_queries
+
+    // Method 2: Run as OS Environment Variable 
     $ PYTHONPATH=. python ingestion/consumer.py 2> logs.txt
     $ PYTHONPATH=. python ingestion/producer.py
     $ PYTHONPATH=. python processing/batch_processing.py 2> batch_logs.txt
@@ -74,6 +88,7 @@ Your Team Reference/
 3.6 Debugging:
     // Clear the storage in HDFS before demo if previous testing cache remains
     $ hdfs dfs -rm -r /user/student/library
+    $ rm /home/student/library/STOP_CONSUMER.txt
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic main_gate_events
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic room_gate_events
 
