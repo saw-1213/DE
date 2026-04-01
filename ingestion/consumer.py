@@ -118,20 +118,16 @@ class LibraryStreamProcessor:
         print("==================================\n")
 
         while True:
-            # 1. Define the kill switch file path
             kill_switch = Path("/home/student/library/STOP_CONSUMER.txt")
             
-            # 2. Check if the orchestrator created it
             if kill_switch.exists():
                 print("\nKill switch detected! Shutting down streams gracefully...")
                 for stream in self.spark.streams.active:
                     stream.stop()
                     
-                # 3. Delete the file using pathlib (no os.remove needed!)
                 kill_switch.unlink() 
                 break
             
-            # 4. Wait for 5 seconds, then loop back and check again
             self.spark.streams.awaitAnyTermination(timeout=5)
 
 if __name__ == "__main__":
