@@ -58,15 +58,11 @@ Your Team Reference/
     $ python utils/upload_students.py
 
 3.4 Run the demo:
-    // Run the following as student:
+    // Run the following as student in the library directory:
+    $ cd home/student/library
     $ python main.py --fast
 
 3.5 To run the modules independently:
-    // Make sure we are currently in the library directory, 
-    // and upload the students dataset
-    $ cd home/student/library
-    $ python utils/upload_students.py
-
     // Method 1: Run as Pythonic Module
     $ python -m ingestion.consumer 2> logs.txt
     $ python -m ingestion.producer
