@@ -2,7 +2,6 @@
 
 from pymongo import MongoClient
 import json
-from collections import defaultdict
 
 class MongoQueries:
     def __init__(self, config_path):
@@ -16,68 +15,117 @@ class MongoQueries:
         self.students = self.db["students"]
 
     def query_1(self):
-        print("\nQuery 1: Under-Engaged Majors (Below Overall Average Library Usage)")
+        print("\nQuery 1: Top 5 Peak Entry Hours (with Percentage)")
 
-        student_map = {}
-        for s in self.students.find():
-            student_map[s["student_id"]] = s.get("major", "Unknown")
+        pipeline = [
+            {"$match": {"event_type": "ENTRY"}},
+            {
+                "$project": {
+                    "hour": {"$substr": ["$time", 0, 2]}
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$hour",
+                    "totalEntries": {"$sum": 1}
+                }
+            },
+            {"$sort": {"totalEntries": -1}}
+        ]
 
-        student_visits = defaultdict(int)
-        for e in self.events.find():
-            student_visits[e["student_id"]] += 1
+        results = list(self.events.aggregate(pipeline))
 
-        major_data = defaultdict(list)
-        for sid, visits in student_visits.items():
-            major = student_map.get(sid, "Unknown")
-            major_data[major].append(visits)
-
-        major_avg = {}
-        for major, visits_list in major_data.items():
-            major_avg[major] = sum(visits_list) / len(visits_list)
-
-        if not major_avg:
+        if not results:
             print("No data found.")
             return
 
-        overall_avg = sum(major_avg.values()) / len(major_avg)
+        total_all = sum(r["totalEntries"] for r in results)
+        top5 = results[:5]
 
-        below_avg = {m: v for m, v in major_avg.items() if v < overall_avg}
+        print(f"\n{'Hour':<10} {'Entries':<12} {'% of Total':>12}")
+        print("-" * 36)
 
-        if not below_avg:
-            print("No majors below overall average.")
-            return
-
-        print(f"\nOverall Avg Visits: {round(overall_avg, 2)}\n")
-        print(f"{'Major':<30} {'Avg Visits':>10}")
-        print("-" * 42)
-
-        for major, avg in sorted(below_avg.items(), key=lambda x: x[1]):
-            print(f"{major:<30} {round(avg, 2):>10}")
+        for r in top5:
+            hour = r["_id"] + ":00"
+            count = r["totalEntries"]
+            percent = (count / total_all) * 100
+            print(f"{hour:<10} {count:<12} {percent:>10.2f}%")
 
     def query_2(self):
-        print("\nQuery 2: Top 5 Students With Most Entries in a Day")
+        print("\nQuery 2: Top 5 Longest Average Stay Duration")
 
-        student_map = {}
-        for s in self.students.find():
-            student_map[s["student_id"]] = s.get("major", "N/A")
+        pipeline = [
+            {
+                "$addFields": {
+                    "timestamp": {
+                        "$dateFromString": {
+                            "dateString": {"$concat": ["$date", "T", "$time"]}
+                        }
+                    }
+                }
+            },
+            {"$sort": {"student_id": 1, "timestamp": 1}},
+            {
+                "$group": {
+                    "_id": "$student_id",
+                    "events": {
+                        "$push": {
+                            "type": "$event_type",
+                            "time": "$timestamp"
+                        }
+                    }
+                }
+            }
+        ]
 
-        entry_count = defaultdict(int)
-        for e in self.events.find():
-            key = (e["student_id"], e["date"])
-            entry_count[key] += 1
+        data = list(self.events.aggregate(pipeline))
 
-        top_5 = sorted(entry_count.items(), key=lambda x: x[1], reverse=True)[:5]
-
-        if not top_5:
+        if not data:
             print("No data found.")
             return
 
-        print(f"\n{'Student ID':<12} {'Major':<25} {'Date':<12} {'Entries':>7}")
+        stay_results = []
+
+        for d in data:
+            student_id = d["_id"]
+            events = d["events"]
+
+            total_duration = 0
+            count = 0
+            entry_time = None
+
+            for e in events:
+                if e["type"] == "ENTRY":
+                    entry_time = e["time"]
+                elif e["type"] == "EXIT" and entry_time:
+                    duration = (e["time"] - entry_time).total_seconds() / 60
+                    total_duration += duration
+                    count += 1
+                    entry_time = None
+
+            if count > 0:
+                avg_duration = total_duration / count
+                stay_results.append({
+                    "student_id": student_id,
+                    "avg_duration": avg_duration
+                })
+
+        for r in stay_results:
+            student = self.students.find_one({"student_id": r["student_id"]})
+            r["major"] = student["major"] if student else "N/A"
+
+        stay_results.sort(key=lambda x: x["avg_duration"], reverse=True)
+        top5 = stay_results[:5]
+
+        if not top5:
+            print("No valid stay duration data.")
+            return
+
+        print(f"\n{'Student ID':<12} {'Major':<25} {'Avg Stay (mins)':>18}")
         print("-" * 60)
 
-        for (student_id, date), entries in top_5:
-            major = student_map.get(student_id, "N/A")
-            print(f"{student_id:<12} {major:<25} {date:<12} {entries:>7}")
+        for r in top5:
+            print(f"{r['student_id']:<12} {r['major']:<25} {round(r['avg_duration'], 2):>18}")
 
     def run(self):
         self.query_1()
@@ -87,3 +135,5 @@ class MongoQueries:
 if __name__ == "__main__":
     mq = MongoQueries("utils/config.json")
     mq.run()
+
+
