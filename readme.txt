@@ -84,9 +84,10 @@ Your Team Reference/
 3.6 Debugging:
     // Clear the storage in HDFS before demo if previous testing cache remains
     $ hdfs dfs -rm -r /user/student/library
+
+    // Remove STOP_CONSUMER.txt that stops the consumer after every demo
     $ rm /home/student/library/STOP_CONSUMER.txt
+
+    // Clear the kafka topics if it fails to terminate itself
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic main_gate_events
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic room_gate_events
-
-    // Remove the STOP_CONSUMER.txt to after every run
-    $ rm STOP_CONSUMER.txt
