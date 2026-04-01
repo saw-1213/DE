@@ -15,7 +15,7 @@ class MongoQueries:
         self.students = self.db["students"]
 
     def query_1(self):
-        print("\nQuery 1: Top 5 Peak Entry Hours (with Percentage)")
+        print("\nQuery 1: Top 5 Peak Entry Hours")
 
         pipeline = [
             {"$match": {"event_type": "ENTRY"}},
