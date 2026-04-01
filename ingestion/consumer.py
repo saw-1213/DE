@@ -67,14 +67,6 @@ class LibraryStreamProcessor:
             .option("maxOffsetsPerTrigger", 30) \
             .load()
 
-    def write_raw(self, good_df):
-        return good_df.selectExpr("raw_json AS value").writeStream \
-            .format("text") \
-            .option("path", self.config["HDFS_RAW_PATH"]) \
-            .option("checkpointLocation", self.config["RAW_CHECKPOINT"]) \
-            .start()
-
-
     def write_curated(self, good_df):
         transformed_df = good_df.select("parsed_data.*") \
             .withColumn("date", to_date(col("timestamp"))) \
@@ -119,7 +111,6 @@ class LibraryStreamProcessor:
         good_df, bad_df = self.quality_check(raw_stream_df)
 
         bad_query = self.write_corrupted(bad_df)
-        raw_query = self.write_raw(good_df)
         hdfs_query = self.write_curated(good_df)
 
         print("\n==================================")
