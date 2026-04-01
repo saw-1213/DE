@@ -46,6 +46,11 @@ def run_pipeline():
         print(f"\nWaiting {wait_time} seconds for Consumer to finish writing to HDFS...")
         time.sleep(wait_time)
 
+        print(f"\n[{wait_time}-Second Mark Reached] Triggering Consumer Kill Switch...")
+        with open("STOP_CONSUMER.txt", "w") as f:
+            f.write("stop")
+        time.sleep(6)
+
         run_command_blocking(batch_cmd, "Phase 3: Batch Aggregation")
 
         print("\n==================================================")
