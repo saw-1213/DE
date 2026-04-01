@@ -50,6 +50,8 @@ def run_pipeline():
         with open("STOP_CONSUMER.txt", "w") as f:
             f.write("stop")
         time.sleep(6)
+        consumer_process = None
+        print("Consumer safely shut down.")
 
         run_command_blocking(batch_cmd, "Phase 3: Batch Aggregation")
 
