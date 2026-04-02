@@ -19,11 +19,6 @@ class Neo4jBatchLoader:
             .getOrCreate()
         self.spark.sparkContext.setLogLevel("ERROR")
 
-    def clear_database(self):
-        print("--- Clearing existing Neo4j database ---")
-        with self.driver.session() as session:
-            session.run("MATCH (n) DETACH DELETE n")
-
     def load_student_dimensions(self):
         try:
             path = self.config["hdfs_student_path"]
@@ -156,7 +151,6 @@ class Neo4jBatchLoader:
             print(f"Room Durations Load Failed: {e}")
 
     def execute_ingestion(self):
-        self.clear_database()
         self.load_student_dimensions()
         self.load_curated_events()
         self.load_batch_durations()
