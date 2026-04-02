@@ -41,7 +41,7 @@ class Neo4jBatchLoader:
                     year_of_study=int(d['year_of_study']),
                     study_level=d['study_level']
                     )
-            print(f"✅ Loaded {len(records)} students")
+            print(f"Loaded {len(records)} students")
         except Exception as e:
             print(f"Student Load Failed: {e}")
 
@@ -105,7 +105,7 @@ class Neo4jBatchLoader:
                     total_loaded += len(batch)
                     print(f"Loaded {total_loaded} events...")
 
-            print(f"✅ Loaded {total_loaded} events")
+            print(f"Loaded {total_loaded} events")
         except Exception as e:
             print(f"Events Load Failed: {e}")
 
@@ -146,7 +146,7 @@ class Neo4jBatchLoader:
                     """, batch=batch)
                     total_loaded += len(batch)
                     print(f"Loaded {total_loaded} room durations...")
-            print(f"✅ Loaded {total_loaded} room durations")
+            print(f"Loaded {total_loaded} room durations")
         except Exception as e:
             print(f"Room Durations Load Failed: {e}")
 
