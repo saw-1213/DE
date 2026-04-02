@@ -27,8 +27,7 @@ class LibraryEventProducer:
                 bootstrap_servers=self.kafka_server,
                 value_serializer=lambda v: json.dumps(v).encode('utf-8'),
                 acks='all',
-                retries=3,
-                enable_idempotence=True
+                retries=3
             )
             print("Producer initialized with no duplication")
         except Exception as e:
