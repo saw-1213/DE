@@ -8,11 +8,13 @@ from pyspark.sql.types import StructType, StructField, StringType, TimestampType
 from kafka.admin import KafkaAdminClient, NewTopic
 from kafka.errors import TopicAlreadyExistsError
 from pathlib import Path
+import sys
 
 class LibraryStreamProcessor:
-    def __init__(self):
+    def __init__(self, display_flag):
         config_mgr = ConfigManager('utils/config.json')
         self.config = config_mgr.get_config()
+        self.display_flag = display_flag
 
         self.setup_kafka_topics()
 
@@ -20,8 +22,8 @@ class LibraryStreamProcessor:
             .appName("LibraryLiveOccupancy") \
             .config("spark.jars.packages", "org.apache.spark:spark-sql-kafka-0-10_2.13:3.5.1") \
             .getOrCreate()
-
         self.spark.sparkContext.setLogLevel("ERROR")
+        
 
         self.schema = StructType([
             StructField("event_id", StringType(), True),
@@ -110,6 +112,7 @@ class LibraryStreamProcessor:
         return transformed_df
 
     def start_pipeline(self):
+        
         raw_stream_df = self.read_stream()
         raw_stream_df.printSchema()
 
@@ -119,7 +122,9 @@ class LibraryStreamProcessor:
 
         bad_query = self.write_corrupted(bad_df)
         curated_query = self.write_curated(transform_df)
-        console_query = self.write_batch(transform_df)
+
+        if self.display_flag == True:
+            console_query = self.write_batch(transform_df)
 
         print("\n==================================")
         print("Pipeline started - writing to HDFS")
@@ -138,6 +143,13 @@ class LibraryStreamProcessor:
             
             self.spark.streams.awaitAnyTermination(timeout=5)
 
-if __name__ == "__main__":
-    processor = LibraryStreamProcessor()
+def run_consumer():
+    display_flag = True
+    if "--silent" in sys.argv:
+        display_flag = False
+
+    processor = LibraryStreamProcessor(display_flag)
     processor.start_pipeline()
+
+if __name__ == "__main__":
+    run_consumer()

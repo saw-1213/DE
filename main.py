@@ -11,12 +11,21 @@ from storage.load_neo4j import Neo4jBatchLoader
 from storage.load_mongodb import MongoLoader
 
 def start_background_consumer():
-    processor = LibraryStreamProcessor()
+    log_file = open("logs.txt", "w")
+    sys.stderr = log_file 
+    processor = LibraryStreamProcessor(display_flag=False)
     processor.start_pipeline()
 
 def start_background_producer(is_fast):
     producer = LibraryEventProducer(fast_mode=is_fast)
     producer.send_events()
+
+def run_batch():
+    log_file = open("batch_logs.txt", "w")
+    sys.stderr = log_file
+    
+    batch_process = LibraryBatchProcessor()
+    batch_process.execute_batch_pipeline()
 
 def run_pipeline():
     try:
@@ -32,7 +41,7 @@ def run_pipeline():
         print("Uploading static student file...")
         execute_upload()
 
-        print("\n[Phase 1] Starting Live Streaming Consumer (Background)...")
+        print("\n[Phase 1] Starting Live Streaming Consumer (Background)...\n\n")
         consumer_process = multiprocessing.Process(target=start_background_consumer)
         consumer_process.start()
 
@@ -43,7 +52,7 @@ def run_pipeline():
         print("\n[Phase 2] Kafka Producer")
         producer_process = multiprocessing.Process(
             target=start_background_producer, 
-            args=(is_fast_mode)
+            args=(is_fast_mode, )
         )
         producer_process.start()
 
@@ -60,12 +69,8 @@ def run_pipeline():
         time.sleep(6)
         print("Consumer safely shut down.")
 
-        consumer_process.terminate()
-        consumer_process.join()
-
         print("\n[Phase 3] Batch Aggregation")
-        batch_process = LibraryBatchProcessor()
-        batch_process.execute_batch_pipeline()
+        run_batch()
 
         if is_full_pipeline:
             print("\n[Phase 4] Loading Data into Neo4j")
@@ -83,7 +88,7 @@ def run_pipeline():
     finally:
         with open("STOP_CONSUMER.txt", "w") as f:
             f.write("stop")     
-        time.sleep(6)
+        time.sleep(8)
 
         if "consumer_process" in locals() and consumer_process.is_alive():
             print("\nTerminating Kafka Consumer...")

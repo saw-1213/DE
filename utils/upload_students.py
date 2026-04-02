@@ -2,7 +2,7 @@ import subprocess
 import sys
 import os
 import json
-from config_manager import ConfigManager
+from utils.config_manager import ConfigManager
 
 class HDFSManager:
     def __init__(self, target_dir):

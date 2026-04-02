@@ -16,6 +16,7 @@ class LibraryBatchProcessor:
         self.spark = SparkSession.builder \
             .appName("LibraryBatchAnalytics") \
             .config("spark.ui.showConsoleProgress", "false") \
+            .sparkContext.setLogLevel("ERROR") \
             .getOrCreate()
         self.spark.sparkContext.setLogLevel("ERROR")
 
