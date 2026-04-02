@@ -25,92 +25,101 @@ class Neo4jBatchLoader:
             session.run("MATCH (n) DETACH DELETE n")
 
     def load_student_dimensions(self):
-        print("--- Loading Student Dimensions into Neo4j ---")
-        local_path = self.config['local_student_path']
-        if not local_path.startswith('file://'):
-            local_path = f"file://{local_path}"
-        df = self.spark.read.csv(local_path, header=True)
-        records = df.collect()
+        try:
+            path = self.config["hdfs_student_path"]
+            print(f"Reading Students from {path}...")
 
-        with self.driver.session() as session:
-            for row in records:
-                d = row.asDict()
-                session.run("""
-                    MERGE (s:Student {student_id: $student_id})
-                    SET s.major = $major,
-                        s.year_of_study = $year_of_study,
-                        s.study_level = $study_level
-                """,
-                student_id=d['student_id'],
-                major=d['major'],
-                year_of_study=int(d['year_of_study']),
-                study_level=d['study_level']
-                )
-        print(f"✅ Loaded {len(records)} students")
+            df = self.spark.read.csv(path, header=True)
+            records = df.collect()
+
+            with self.driver.session() as session:
+                for row in records:
+                    d = row.asDict()
+                    session.run("""
+                        MERGE (s:Student {student_id: $student_id})
+                        SET s.major = $major,
+                            s.year_of_study = $year_of_study,
+                            s.study_level = $study_level
+                    """,
+                    student_id=d['student_id'],
+                    major=d['major'],
+                    year_of_study=int(d['year_of_study']),
+                    study_level=d['study_level']
+                    )
+            print(f"✅ Loaded {len(records)} students")
+        except Exception as e:
+            print(f"Student Load Failed: {e}")
 
     def load_curated_events(self):
-        print("--- Loading Curated Streaming Events from HDFS ---")
-        df = self.spark.read.parquet(self.config['HDFS_CURATED_PATH'])
-        records = df.collect()
+        try:
+            path = self.config["HDFS_CURATED_PATH"]
+            print(f"Reading Events from {path}...")
 
-        print(f"Found {len(records)} records in HDFS")
+            df = self.spark.read.parquet(path)
+            records = df.collect()
 
-        # Prepare batch data
-        batch_data = []
-        for row in records:
-            d = row.asDict()
-            batch_data.append({
-                'event_id': d['event_id'],
-                'student_id': d['student_id'],
-                'event_type': d['event_type'],
-                'gate_type': d['gate_type'],
-                'location': d['location'],
-                'date': str(d['date']),
-                'time': str(d['time'])
-            })
+            print(f"Found {len(records)} records in HDFS")
 
-        # Load in batches
-        batch_size = 5000
-        total_loaded = 0
+            # Prepare batch data
+            batch_data = []
+            for row in records:
+                d = row.asDict()
+                batch_data.append({
+                    'event_id': d['event_id'],
+                    'student_id': d['student_id'],
+                    'event_type': d['event_type'],
+                    'gate_type': d['gate_type'],
+                    'location': d['location'],
+                    'date': str(d['date']),
+                    'time': str(d['time'])
+                })
 
-        with self.driver.session() as session:
-            for i in range(0, len(batch_data), batch_size):
-                batch = batch_data[i:i+batch_size]
+            # Load in batches
+            batch_size = 5000
+            total_loaded = 0
 
-                session.run("""
-                    UNWIND $batch AS event
-                    MERGE (e:Event {event_id: event.event_id})
-                    SET e.event_type = event.event_type,
-                        e.gate_type = event.gate_type,
-                        e.location = event.location,
-                        e.date = date(event.date),
-                        e.time = time(event.time),
-                        e.student_id = event.student_id
-                    MERGE (s:Student {student_id: event.student_id})
-                    MERGE (s)-[:PERFORMED]->(e)
+            with self.driver.session() as session:
+                for i in range(0, len(batch_data), batch_size):
+                    batch = batch_data[i:i+batch_size]
 
-                    FOREACH (ignore IN CASE WHEN event.gate_type = 'MAIN_GATE' THEN [1] ELSE [] END |
-                        MERGE (l:Library {name: 'Main Library'})
-                        MERGE (e)-[:AT_LIBRARY]->(l)
-                        MERGE (s)-[:VISITED]->(l)
-                    )
+                    session.run("""
+                        UNWIND $batch AS event
+                        MERGE (e:Event {event_id: event.event_id})
+                        SET e.event_type = event.event_type,
+                            e.gate_type = event.gate_type,
+                            e.location = event.location,
+                            e.date = date(event.date),
+                            e.time = time(event.time),
+                            e.student_id = event.student_id
+                        MERGE (s:Student {student_id: event.student_id})
+                        MERGE (s)-[:PERFORMED]->(e)
 
-                    FOREACH (ignore IN CASE WHEN event.gate_type = 'ROOM_GATE' THEN [1] ELSE [] END |
-                        MERGE (r:Room {location: event.location})
-                        MERGE (e)-[:IN_ROOM]->(r)
-                        MERGE (s)-[:ENTERED]->(r)
-                    )
-                """, batch=batch)
+                        FOREACH (ignore IN CASE WHEN event.gate_type = 'MAIN_GATE' THEN [1] ELSE [] END |
+                            MERGE (l:Library {name: 'Main Library'})
+                            MERGE (e)-[:AT_LIBRARY]->(l)
+                            MERGE (s)-[:VISITED]->(l)
+                        )
 
-                total_loaded += len(batch)
-                print(f"Loaded {total_loaded} events...")
+                        FOREACH (ignore IN CASE WHEN event.gate_type = 'ROOM_GATE' THEN [1] ELSE [] END |
+                            MERGE (r:Room {location: event.location})
+                            MERGE (e)-[:IN_ROOM]->(r)
+                            MERGE (s)-[:ENTERED]->(r)
+                        )
+                    """, batch=batch)
 
-        print(f"✅ Loaded {total_loaded} events")
+                    total_loaded += len(batch)
+                    print(f"Loaded {total_loaded} events...")
+
+            print(f"✅ Loaded {total_loaded} events")
+        except Exception as e:
+            print(f"Events Load Failed: {e}")
 
     def load_batch_durations(self):
-        print("--- Loading Batch Room Durations from HDFS ---")
         try:
-            df = self.spark.read.parquet(self.config['HDFS_ROOM_DURATION_PATH'])
+            path = self.config["HDFS_ROOM_DURATION_PATH"]
+            print(f"Reading Room Durations from {path}...")
+
+            df = self.spark.read.parquet(path)
             records = df.collect()
 
             batch_data = []
@@ -144,18 +153,16 @@ class Neo4jBatchLoader:
                     print(f"Loaded {total_loaded} room durations...")
             print(f"✅ Loaded {total_loaded} room durations")
         except Exception as e:
-            print(f"⚠️ No batch durations found: {e}")
+            print(f"Room Durations Load Failed: {e}")
 
     def execute_ingestion(self):
-        try:
-            self.clear_database()
-            self.load_student_dimensions()
-            self.load_curated_events()
-            self.load_batch_durations()
-            print("--- Neo4j Ingestion Complete ---")
-        finally:
-            self.driver.close()
-            self.spark.stop()
+        self.clear_database()
+        self.load_student_dimensions()
+        self.load_curated_events()
+        self.load_batch_durations()
+        print("--- Neo4j Ingestion Complete ---")
+        self.driver.close()
+        self.spark.stop()
 
 if __name__ == "__main__":
     loader = Neo4jBatchLoader('utils/config.json')
