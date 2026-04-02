@@ -109,51 +109,9 @@ class Neo4jBatchLoader:
         except Exception as e:
             print(f"Events Load Failed: {e}")
 
-    def load_batch_durations(self):
-        try:
-            path = self.config["HDFS_ROOM_DURATION_PATH"]
-            print(f"Reading Room Durations from {path}...")
-
-            df = self.spark.read.parquet(path)
-            records = df.collect()
-
-            batch_data = []
-            for row in records:
-                d = row.asDict()
-                batch_data.append({
-                    'student_id': d['student_id'],
-                    'room_id': d['room_id'],
-                    'record_date': str(d['record_date']),
-                    'occupied_minutes': float(d['occupied_minutes']),
-                    'entry_time': str(d['entry_time']),
-                    'exit_time': str(d['exit_time'])
-                })
-
-            batch_size = 1000
-            total_loaded = 0
-
-            with self.driver.session() as session:
-                for i in range(0, len(batch_data), batch_size):
-                    batch = batch_data[i:i+batch_size]
-                    session.run("""
-                        UNWIND $batch AS session_data
-                        MERGE (s:Student {student_id: session_data.student_id})
-                        MERGE (r:Room {location: session_data.room_id})
-                        MERGE (s)-[study:STUDIED_IN {date: session_data.record_date}]->(r)
-                        SET study.duration_minutes = session_data.occupied_minutes,
-                            study.entry_time = time(session_data.entry_time),
-                            study.exit_time = time(session_data.exit_time)
-                    """, batch=batch)
-                    total_loaded += len(batch)
-                    print(f"Loaded {total_loaded} room durations...")
-            print(f"Loaded {total_loaded} room durations")
-        except Exception as e:
-            print(f"Room Durations Load Failed: {e}")
-
     def execute_ingestion(self):
         self.load_student_dimensions()
         self.load_curated_events()
-        self.load_batch_durations()
         print("--- Neo4j Ingestion Complete ---")
         self.driver.close()
         self.spark.stop()
