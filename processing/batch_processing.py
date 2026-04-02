@@ -9,8 +9,10 @@ from pyspark.sql.functions import col, to_date, hour, count, \
 from utils.config_manager import ConfigManager
 
 class LibraryBatchProcessor:
-    def __init__(self, config):
-        self.config = config
+    def __init__(self):
+        config_mgr = ConfigManager('utils/config.json')
+        self.config = config_mgr.get_config()
+
         self.spark = SparkSession.builder \
             .appName("LibraryBatchAnalytics") \
             .config("spark.ui.showConsoleProgress", "false") \
@@ -138,12 +140,6 @@ class LibraryBatchProcessor:
         
         self.spark.stop()
 
-def run_batch_job():
-    config_mgr = ConfigManager('utils/config.json')
-    app_settings = config_mgr.get_config()
-    
-    processor = LibraryBatchProcessor(app_settings)
-    processor.execute_batch_pipeline()
-
 if __name__ == "__main__":
-    run_batch_job()
+    processor = LibraryBatchProcessor()
+    processor.execute_batch_pipeline()

@@ -60,7 +60,14 @@ Your Team Reference/
 3.4 Run the demo:
     // Run the following as student in the library directory:
     $ cd home/student/library
-    $ python main.py --fast
+
+    // 'fast' flag allows producer to publish events rapidly
+    // 'db' flag allows the pipeline to include loading data into database
+    $ python main.py [--fast --db]
+
+    // Database queries
+    $ python -m processing.run_neo4j_queries
+    $ python -m processing.run_mongodb_queries
 
 3.5 To run the modules independently:
     // Method 1: Run as Pythonic Module

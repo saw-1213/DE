@@ -1,76 +1,100 @@
-import subprocess
+import multiprocessing
 import time
 import sys
 
-def run_command_blocking(command, step_name):
-    print(f"\n[{step_name}] Starting...")
-    print(f"Executing: {command}")
-    
-    process = subprocess.run(command, shell=True)
-    
-    if process.returncode != 0:
-        print(f"\nERROR: [{step_name}] failed. Stopping pipeline.")
-        sys.exit(1)
-    
-    print(f"[{step_name}] Completed Successfully.")
+from utils.upload_students import execute_upload
+from ingestion.consumer import LibraryStreamProcessor
+from ingestion.producer import LibraryEventProducer
+from processing.batch_processing import LibraryBatchProcessor
+from storage.load_neo4j import Neo4jBatchLoader
+from storage.load_mongodb import MongoLoader
+
+def start_background_consumer():
+    processor = LibraryStreamProcessor()
+    processor.start_pipeline()
+
+def start_background_producer(is_fast):
+    producer = LibraryEventProducer(fast_mode=is_fast)
+    producer.send_events()
 
 def run_pipeline():
-    is_fast_mode = "--fast" in sys.argv
-    speed_label = "FAST MODE" if is_fast_mode else "SIMULATION MODE"
-
-    print("==================================================")
-    print(f"         STARTING PIPELINE ({speed_label})       ")
-    print("==================================================")
-    print("Ensure HDFS, Zookeeper, and Kafka are already running!\n")
-    time.sleep(3)
-
-    student_cmd = "python utils/upload_students.py"
-    consumer_cmd = "python -m ingestion.consumer 2> logs.txt"
-    producer_cmd = "python -m ingestion.producer --fast" if is_fast_mode else "python -m ingestion.producer"
-    batch_cmd = "python -m processing.batch_processing 2> batch_logs.txt"
-
-    consumer_process = None
-
     try:
-        run_command_blocking(student_cmd, "Uploading static student file...")
+        is_fast_mode = "--fast" in sys.argv
+        is_full_pipeline = "--db" in sys.argv
 
-        print("\n[Phase 1] Starting Live Stream Consumer (Background)...")
-        consumer_process = subprocess.Popen(consumer_cmd, shell=True)
+        speed_label = "FAST MODE" if is_fast_mode else "SIMULATION MODE"
+        print("==================================================")
+        print(f"         STARTING PIPELINE ({speed_label})       ")
+        print("==================================================")
+        print("Ensure HDFS, Zookeeper, and Kafka are already running!\n")
+
+        print("Uploading static student file...")
+        execute_upload()
+
+        print("\n[Phase 1] Starting Live Streaming Consumer (Background)...")
+        consumer_process = multiprocessing.Process(target=start_background_consumer)
+        consumer_process.start()
+
         print("Waiting 20 seconds for Spark to initialize...")
         time.sleep(20)
         print("Consumer is listening.")
 
-        run_command_blocking(producer_cmd, "Phase 2: Kafka Producer")
+        print("\n[Phase 2] Kafka Producer")
+        producer_process = multiprocessing.Process(
+            target=start_background_producer, 
+            args=(is_fast_mode)
+        )
+        producer_process.start()
 
-        wait_time = 60 if is_fast_mode else 30
-        print(f"\nWaiting {wait_time} seconds for Consumer to finish writing to HDFS...")
+        if is_fast_mode:
+            wait_time = 60
+        else:
+            wait_time = 30
+        print(f"\nWaiting {wait_time} seconds for Consumer to write to HDFS...")
         time.sleep(wait_time)
 
-        print(f"\n[{wait_time}-Second Mark Reached] Triggering Consumer Kill Switch...")
+        print("\nTriggering Consumer Shutdown")
         with open("STOP_CONSUMER.txt", "w") as f:
             f.write("stop")
         time.sleep(6)
-        consumer_process = None
         print("Consumer safely shut down.")
 
-        run_command_blocking(batch_cmd, "Phase 3: Batch Aggregation")
+        consumer_process.terminate()
+        consumer_process.join()
 
-        print("\n==================================================")
-        print("             FULL PIPELINE RUN COMPLETE          ")
-        print("==================================================")
+        print("\n[Phase 3] Batch Aggregation")
+        batch_process = LibraryBatchProcessor()
+        batch_process.execute_batch_pipeline()
+
+        if is_full_pipeline:
+            print("\n[Phase 4] Loading Data into Neo4j")
+            neo4j = Neo4jBatchLoader("utils/config.json")
+            neo4j.execute_ingestion()
+
+            print("\n[Phase 5] Loading Data into Mongodb")
+            mongodb = MongoLoader("utils/config.json")
+            mongodb.run()
+
 
     except KeyboardInterrupt:
-        print("\nPipeline forcefully interrupted by user.")
-        
-    finally:
-        if consumer_process:
-            print("\nCleaning up: Triggering Consumer Kill Switch...")
+        print("\nPipeline forcefully interrupted by user...")
 
-            with open("STOP_CONSUMER.txt", "w") as f:
-                f.write("stop")
-                
-            time.sleep(6) 
-            print("Consumer safely shut down.")
+    finally:
+        with open("STOP_CONSUMER.txt", "w") as f:
+            f.write("stop")     
+        time.sleep(6)
+
+        if "consumer_process" in locals() and consumer_process.is_alive():
+            print("\nTerminating Kafka Consumer...")
+            consumer_process.terminate()
+            consumer_process.join()
+            
+        if "producer_process" in locals() and producer_process.is_alive():
+            print("\nTerminating Kafka Producer...")
+            producer_process.terminate()
+            producer_process.join()
+ 
+        print("\nPipeline shut down")
 
 if __name__ == "__main__":
     run_pipeline()
