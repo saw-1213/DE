@@ -5,7 +5,6 @@ from utils.config_manager import ConfigManager
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, from_json, to_date, date_format
 from pyspark.sql.types import StructType, StructField, StringType, TimestampType
-from pyspark.sql.functions import col, from_json
 from kafka.admin import KafkaAdminClient, NewTopic
 from kafka.errors import TopicAlreadyExistsError
 from pathlib import Path
@@ -67,19 +66,18 @@ class LibraryStreamProcessor:
             .option("maxOffsetsPerTrigger", 30) \
             .load()
 
-    def write_curated(self, good_df):
-        transformed_df = good_df.select("parsed_data.*") \
-            .withColumn("date", to_date(col("timestamp"))) \
-            .withColumn("time", date_format(col("timestamp"), "HH:mm:ss")) \
-            .drop("timestamp")
-
-        hdfs_query = transformed_df.writeStream \
+    def write_curated(self, transform_df):
+        return transform_df.writeStream \
             .format("parquet") \
             .option("path", self.config["HDFS_CURATED_PATH"]) \
             .option("checkpointLocation", self.config["CURATED_CHECKPOINT"]) \
             .start()
-
-        return hdfs_query
+    
+    def write_batch(self, good_df):
+        return good_df.writeStream \
+            .format("console") \
+            .option("truncate", "false") \
+            .start()
     
     def write_corrupted(self, bad_df):
         return bad_df.selectExpr("raw_json AS corrupted_record").writeStream \
@@ -102,16 +100,26 @@ class LibraryStreamProcessor:
         )
 
         return good_df, bad_df
+    
+    def transform_features(self, good_df):
+        transformed_df = good_df.select("parsed_data.*") \
+            .withColumn("date", to_date(col("timestamp"))) \
+            .withColumn("time", date_format(col("timestamp"), "HH:mm:ss")) \
+            .drop("timestamp")
+        
+        return transformed_df
 
     def start_pipeline(self):
         raw_stream_df = self.read_stream()
-
         raw_stream_df.printSchema()
 
         good_df, bad_df = self.quality_check(raw_stream_df)
+        
+        transform_df = self.transform_features(good_df)
 
         bad_query = self.write_corrupted(bad_df)
-        hdfs_query = self.write_curated(good_df)
+        curated_query = self.write_curated(transform_df)
+        console_query = self.write_batch(transform_df)
 
         print("\n==================================")
         print("Pipeline started - writing to HDFS")
