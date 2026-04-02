@@ -122,37 +122,6 @@ def run_summary(driver):
         print(f"  • Average Daily Visits: {visits_per_day:.1f}")
         print(f"  • Average Visits per Student per Day: {visits_per_student_per_day:.2f} visits/day")
 
-def run_peak_hours(driver):
-    print("\n" + "=" * 70)
-    print("PEAK HOURS ANALYSIS")
-    print("=" * 70)
-    with driver.session() as session:
-        result = session.run("""
-            MATCH (e:Event)
-            WHERE e.event_type = 'ENTRY'
-              AND e.gate_type = 'MAIN_GATE'
-            WITH e.time.hour as local_hour
-            RETURN local_hour,
-                   CASE
-                     WHEN local_hour = 0 THEN '12:00 AM'
-                     WHEN local_hour < 12 THEN toString(local_hour) + ':00 AM'
-                     WHEN local_hour = 12 THEN '12:00 PM'
-                     ELSE toString(local_hour - 12) + ':00 PM'
-                   END as time,
-                   COUNT(*) as visits
-            ORDER BY visits DESC
-            LIMIT 5
-        """)
-
-        records = list(result)
-        if not records:
-            print("No data found for peak hours analysis")
-            return
-
-        print("Top 5 Peak Hours:")
-        for record in records:
-            print(f"  {record['time']} ({record['local_hour']}:00) - {record['visits']} visits")
-
 def run_most_popular_rooms(driver):
     print("\n" + "=" * 70)
     print("MOST POPULAR ROOMS (Overall)")
@@ -193,7 +162,6 @@ def main():
     driver.verify_connectivity()
     print("Successfully connected to Neo4j\n")
 
-    # Check if data exists
     with driver.session() as session:
         result = session.run("MATCH (e:Event) RETURN count(e) as event_count")
         event_count = result.single()['event_count']
@@ -205,11 +173,9 @@ def main():
 
         print(f"Found {event_count} events in Neo4j. Running queries...\n")
 
-    # Run all queries
     run_query_1(driver)
     run_query_2(driver)
     run_summary(driver)
-    run_peak_hours(driver)
     run_most_popular_rooms(driver)
 
     driver.close()
