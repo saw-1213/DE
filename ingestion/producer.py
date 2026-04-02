@@ -42,15 +42,15 @@ class LibraryEventProducer:
         print("Failed to deliver message to Kafka: " + str(excp))
         
     def write_raw_to_hdfs(self):
-        print("\n[Ingestion] Starting Raw Data Dump to HDFS Data Lake...")
+        print("\nStarting dumping raw data to HDFS...")
         
         try:
             subprocess.run(["hdfs", "dfs", "-mkdir", "-p", self.hdfs_raw_path], check=True)
             subprocess.run(["hdfs", "dfs", "-put", "-f", self.data_file, self.hdfs_raw_path], check=True)
             
-            print(f"[Ingestion] SUCCESS: Raw data safely stored in {self.hdfs_raw_path}\n")
+            print(f"SUCCESS: Raw data safely stored in {self.hdfs_raw_path}\n")
         except subprocess.CalledProcessError as e:
-            print(f"[Ingestion] ERROR: Failed to upload raw data. Is Hadoop running? {e}\n")
+            print(f"ERROR: Failed to upload raw data. Is Hadoop running? {e}\n")
     
     def send_events(self):
         try:
