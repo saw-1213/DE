@@ -95,6 +95,13 @@ Your Team Reference/
     // Remove STOP_CONSUMER.txt that stops the consumer if it exists
     $ rm /home/student/library/STOP_CONSUMER.txt
 
+    // Checking for any kafka topics
+    $ kafka-topics.sh --bootstrap-server localhost:9092 --list
+
     // Clear the kafka topics if it fails to terminate itself
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic main_gate_events
     $ kafka-topics.sh --bootstrap-server localhost:9092 --delete --topic room_gate_events
+
+    // Checking the contents within kafka topics
+    $ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic main_gate_events --from-beginning
+    $ kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic room_gate_events --from-beginning
