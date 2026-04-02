@@ -55,21 +55,8 @@ class Neo4jBatchLoader:
 
             print(f"Found {len(records)} records in HDFS")
 
-            # Prepare batch data
-            batch_data = []
-            for row in records:
-                d = row.asDict()
-                batch_data.append({
-                    'event_id': d['event_id'],
-                    'student_id': d['student_id'],
-                    'event_type': d['event_type'],
-                    'gate_type': d['gate_type'],
-                    'location': d['location'],
-                    'date': str(d['date']),
-                    'time': str(d['time'])
-                })
+            batch_data = [row.asDict() for row in records]
 
-            # Load in batches
             batch_size = 5000
             total_loaded = 0
 
