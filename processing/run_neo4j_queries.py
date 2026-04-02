@@ -122,10 +122,6 @@ def run_summary(driver):
         print(f"  • Average Daily Visits: {visits_per_day:.1f}")
         print(f"  • Average Visits per Student per Day: {visits_per_student_per_day:.2f} visits/day")
 
-def run_most_popular_rooms(driver):
-    print("\n" + "=" * 70)
-    print("MOST POPULAR ROOMS (Overall)")
-    print("=" * 70)
     with driver.session() as session:
         result = session.run("""
             MATCH (e:Event)-[:IN_ROOM]->(r:Room)
@@ -142,7 +138,7 @@ def run_most_popular_rooms(driver):
             print("No room visit data found")
             return
 
-        print("Top 5 Most Popular Rooms:")
+        print("\nTop 5 Most Popular Rooms (Overall):")
         for record in records:
             print(f"  Room {record['room']}: {record['visits']} visits")
 
@@ -168,7 +164,6 @@ def main():
 
         if event_count == 0:
             print("WARNING: No data found in Neo4j database!")
-            print("Please run batch_processing_all.py first to load data from HDFS into Neo4j")
             return
 
         print(f"Found {event_count} events in Neo4j. Running queries...\n")
@@ -176,7 +171,6 @@ def main():
     run_query_1(driver)
     run_query_2(driver)
     run_summary(driver)
-    run_most_popular_rooms(driver)
 
     driver.close()
     print("\n" + "=" * 70)
