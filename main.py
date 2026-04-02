@@ -1,6 +1,7 @@
 import multiprocessing
 import time
 import sys
+from pathlib import Path
 
 from utils.upload_students import execute_upload
 from ingestion.consumer import LibraryStreamProcessor
@@ -95,6 +96,10 @@ def run_pipeline():
             producer_process.join()
  
         print("\nPipeline shut down")
+
+        kill_file = Path("STOP_CONSUMER.txt")
+        if kill_file.exists():
+            kill_file.unlink()
 
 if __name__ == "__main__":
     run_pipeline()
