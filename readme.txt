@@ -71,7 +71,7 @@ Your Team Reference/
 
 3.5 To run the modules independently:
     // Method 1: Run as Pythonic Module
-    $ python -m ingestion.consumer 2> logs.txt
+    $ python -m ingestion.consumer [--silent] 2> logs.txt
     $ python -m ingestion.producer
     $ python -m processing.batch_processing 2> batch_logs.txt
     $ python -m storage.load_neo4j
@@ -80,7 +80,7 @@ Your Team Reference/
     $ python -m processing.run_mongodb_queries
 
     // Method 2: Run as OS Environment Variable 
-    $ PYTHONPATH=. python ingestion/consumer.py 2> logs.txt
+    $ PYTHONPATH=. python ingestion/consumer.py [--silent] 2> logs.txt
     $ PYTHONPATH=. python ingestion/producer.py
     $ PYTHONPATH=. python processing/batch_processing.py 2> batch_logs.txt
     $ PYTHONPATH=. python storage/load_neo4j.py
